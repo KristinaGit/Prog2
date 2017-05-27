@@ -86,15 +86,22 @@ public class Kalender implements IKalender {
 		 int tagesnummer = calFuncs.tagesnummer( 1, 12, year);
 		 int weekday = calFuncs.wochentag_im_jahr( year, tagesnummer);  
 		 Integer nradventssonntag = 1;
+		 int advent4 = 0;
 		 
 		 for( int i = 1; i<=24; i++) {
 			 if(0 == weekday) {
 				 holidaysforcurrent.put( tagesnummer, new Event(nradventssonntag.toString() + ". Adventssonntag"));
 				 nradventssonntag++;
+				 advent4 = tagesnummer;
 			 }
 			 weekday = (weekday + 1) % 7;
 			 tagesnummer++;
 		 }
+		 int tagesnummerHeiligAbend = tagesnummer - 1;
+		 	if( tagesnummerHeiligAbend == advent4)
+		 //advent4 = tagesnummer vom 4. Advent, davon 4*7 Tage (4 Sonntage ) - 4 (Differenz der Tage Sonntag zu Mittwoch rückwärts) subtrahiert
+		 		holidaysforcurrent.put( (advent4-32), new Event("Buss- und Bettag"));
+		
 		 
 		 // fuer den Muttertag im Mai
 		 tagesnummer = calFuncs.tagesnummer( 1, 5, year);
@@ -104,9 +111,10 @@ public class Kalender implements IKalender {
 		 for( int i = 1; i<=31; i++) {
 			 if(0 == weekday) {
 				 nrSonntag++;
+				 
 			 }
 			 if( 2 == nrSonntag) {
-				 if(tagesnummer == (ostersonntag+49)) {
+				 if(tagesnummer == (ostersonntag+49)) { //fuer den Fall Pfingstsonntag faellt auf den 2. So im Mai
 					 holidaysforcurrent.put( tagesnummer-7, new Event("Muttertag"));
 				 }	 
 				 holidaysforcurrent.put( tagesnummer, new Event("Muttertag"));
@@ -115,7 +123,8 @@ public class Kalender implements IKalender {
 			 weekday = (weekday + 1) % 7;
 			 tagesnummer++;
 		 }	
-	 }
+	 }	
+	 
 	 
 	 
 	 /*StringBuffer formatMonth
