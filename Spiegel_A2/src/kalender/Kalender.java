@@ -304,6 +304,35 @@ public class Kalender implements IKalender {
 		return strwochentag;
 	 }
 			
+	 /*
+	  * int getMonatslaenge()
+	  * ------------------------------------------------------------------------------------
+	  * @param: int monat
+	  * @param: int jahr
+	  * ------------------------------------------------------------------------------------
+	  * @return: int daysInMonth
+	  * ------------------------------------------------------------------------------------
+	  * Hilfsmethode switch fuer die unterschiedlichen Monatslaengen
+	  */
+	 public int getMonatslaenge( int jahr, int monat) {
+
+		boolean pruefSchaltjahr = calFuncs.istSchaltjahr(jahr);
+		int daysInMonth = 31;
+		
+		// fuer Monate mit 30 Tagen (April, Juni, September, November)		 
+		if(monat == 4 || monat == 6 || monat == 9 || monat == 11){
+			daysInMonth = 30;			
+		}
+		else if(monat == 2){
+			daysInMonth = 28;
+			if(pruefSchaltjahr){ //geschachteltes if, da es sonst das naechste Statement nicht ueberpruefen wuerde
+				daysInMonth = 29;
+			}
+		}
+		
+		return daysInMonth;
+	}
+	 
 	public String getMonatsblatt(int jahr, int monat) {
 		
 		
@@ -335,25 +364,12 @@ public class Kalender implements IKalender {
 		}
 		weekday++;
 		
-		int daynumber = 1;
-		int daysInMonth = 31;
-		
-		
-		 // fuer Monate mit 30 Tagen (April, Juni, September, November)		 
-		if(monat == 4 || monat == 6 || monat == 9 || monat == 11){
-			daysInMonth = 30;			
-		}
-		else if(monat == 2){
-			daysInMonth = 28;
-			if(pruefSchaltjahr){ //geschachteltes if, da es sonst das naechste Statement nicht ueberpruefen wuerde
-				daysInMonth = 29;
-			}
-		}
+		int daysInMonth = getMonatslaenge( jahr, monat);
 
 		//fuer die Ausgabe der Feiertage im jeweiligen Monat
 		ArrayList<String> holidaysinmonth = new ArrayList<String>();
 		
-		for (daynumber = 1; daynumber <= daysInMonth; daynumber++) {
+		for ( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
 			
 			
 			 	if (modus == 1){

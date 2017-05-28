@@ -31,25 +31,35 @@ public class Jahresplaner {
     public LinkedList<String> baueMonat( int monat){
     	
     	LinkedList<String> monatInZeilen = new LinkedList<>();
-    	StringBuffer zeile = new StringBuffer();
     	
     	int tagesnummer = kf.tagesnummer(tag, monat, jahr);
-    	int wochentag= kf.wochentag_im_jahr(monat, tagesnummer);
-    	
-    	zeile.append(kalender.getMonatsname(monat));
+    	int wochentag = kf.wochentag_im_jahr(monat, tagesnummer);
+    	int daysInMonth = kalender.getMonatslaenge(wochentag, monat);
+
+    	StringBuffer zeile = new StringBuffer();
+        zeile.append(kalender.getMonatsname(monat));
     	zeile.append(" ");
     	zeile.append(jahr);
     	zeile.append("\n");
-    	zeile.append(tagesnummer);
-    	zeile.append("|");
-    	zeile.append(kalender.getWochentagsname(wochentag));
-    	zeile.append("|");
-    	zeile.append("01");
-    	
     	monatInZeilen.add(zeile.toString());
     	
+    	for( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
+    		
+    		zeile = new StringBuffer();
+        	
+	    	zeile.append(tagesnummer);
+	    	zeile.append("|");
+	    	zeile.append(kalender.getWochentagsname(wochentag));
+	    	zeile.append("|");
+	    	zeile.append(daynumber);
+	    	zeile.append("\n");
+	    	monatInZeilen.add(zeile.toString());
+	    	
+	    	wochentag = (wochentag + 1) % 7;	
+	    	tagesnummer++;
+    	}
+    	
     	return monatInZeilen;
-
     }
 
     /**
