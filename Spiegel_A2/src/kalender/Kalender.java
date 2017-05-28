@@ -10,6 +10,9 @@ package kalender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 
 
 public class Kalender implements IKalender {
@@ -26,7 +29,7 @@ public class Kalender implements IKalender {
 	
 	KalenderFunktionen calFuncs = new KalenderFunktionen();
 	
-	 int LINE_LENGTH = 32; 
+	int LINE_LENGTH = 32; 
 	 
 	/*
 	 * @param: int calFormatSelection: Auswahl Kalenderformat europaeisch als Klassenvariable (Eingabe wird bei Input im auswahlMenue() evaluiert)
@@ -40,20 +43,15 @@ public class Kalender implements IKalender {
 	  * TODO: Methodendefinition
 	  */
 	 void generateGeneralHolidays() {
+		 
 		 holidays.put( 1, new Event("Neujahr"));
 		 holidays.put( 6, new Event("Heilige 3 Koenige"));
 	   	 holidays.put( 31+14, new Event("Valentinstag"));
 	   	 holidays.put( 121, new Event("1. Mai"));
-	   	 //holidays.put( , new Event("Muttertag"));
 	   	 holidays.put( 227, new Event("Maria Himmelfahrt"));
 	   	 holidays.put( 276, new Event("Tag der dt. Einheit"));
 	     holidays.put(304, new Event("Reforamtionstag"));
-	   	 holidays.put(305, new Event("Allerheiligen"));
-	     //holidays.put(, new Event("Bu� und Bettag"));
-	   	 //holidays.put(, new Event("1. Advent"));
-	   	 //holidays.put(, new Event("2. Advent"));
-	   	 //holidays.put(, new Event("3. Advent"));
-	   	 //holidays.put(, new Event("4. Advent"));
+	   	 holidays.put(305, new Event("Allerheiligen"));     
 	   	 holidays.put( 358,new Event("Weihnachten"));
 	   	 holidays.put(359, new Event("1. Weihnachtstag"));
 	   	 holidays.put(360, new Event("2. Weihnachtstag"));
@@ -65,7 +63,29 @@ public class Kalender implements IKalender {
 	 void generateHolidaysForCurrentYear( int year) {
 		 
 		 //shallowcopy von holidays
-		 holidaysforcurrent = (HashMap)holidays.clone();
+		 boolean pruefSchaltjahr= calFuncs.istSchaltjahr(year);
+		 if( ! pruefSchaltjahr) {
+			 holidaysforcurrent = (HashMap)holidays.clone();
+		 }
+		 else {
+			 int feblast = calFuncs.tagesnummer( 29, 02, year);
+			 
+			 // we actually need a deep copy here
+			 holidaysforcurrent = new HashMap<Integer, Event>();
+			 
+			 Iterator it = holidays.entrySet().iterator();
+			 while( it.hasNext()) {
+				 Map.Entry me = (Map.Entry)it.next();
+				 Integer key = (Integer) me.getKey();
+				 if( key > feblast) {
+					 holidaysforcurrent.put( key+1, (Event) me.getValue());
+				 }
+				 else {
+					 holidaysforcurrent.put( key, (Event) me.getValue());
+				 }
+			 }
+		 }
+		 
 		 
 		 int ostersonntag = calFuncs.ostersonntag(year);
 		 holidaysforcurrent.put( ostersonntag-48, new Event("Rosenmontag"));
@@ -97,10 +117,16 @@ public class Kalender implements IKalender {
 			 weekday = (weekday + 1) % 7;
 			 tagesnummer++;
 		 }
+		 // fuer den Buss- und Bettag
 		 int tagesnummerHeiligAbend = tagesnummer - 1;
-		 	if( tagesnummerHeiligAbend == advent4)
-		 //advent4 = tagesnummer vom 4. Advent, davon 4*7 Tage (4 Sonntage ) - 4 (Differenz der Tage Sonntag zu Mittwoch rückwärts) subtrahiert
-		 		holidaysforcurrent.put( (advent4-32), new Event("Buss- und Bettag"));
+		 tagesnummer = calFuncs.tagesnummer( 1, 11, year);
+		 // ?: int weekdayBettag = calFuncs.wochentag_im_jahr( year, tagesnummer); 
+		 if( tagesnummerHeiligAbend == advent4){
+			 //advent4 = tagesnummer vom 4. Advent, davon 4*7 Tage (4 Sonntage ) - 4 (Differenz der Tage Sonntag zu Mittwoch rückwärts) subtrahiert
+		 	 holidaysforcurrent.put( (advent4-32), new Event("Buss- und Bettag"));
+		 } else{
+		 	holidaysforcurrent.put( (advent4-32), new Event("Buss- und Bettag"));
+		 }
 		
 		 
 		 // fuer den Muttertag im Mai
@@ -268,7 +294,7 @@ public class Kalender implements IKalender {
 		else if(monat == 2){
 			daysInMonth = 28;
 			if(pruefSchaltjahr){ //geschachteltes if, da es sonst das naechste Statement nicht ueberpruefen wuerde
-				assert( false); // , "Schaltjahr: Weihnachten etc. muss angepasst werden"
+				assert( false); // TODO "Schaltjahr: Weihnachten etc. muss angepasst werden"
 				daysInMonth = 29;
 			}
 		}
@@ -449,12 +475,7 @@ public class Kalender implements IKalender {
 		modus = 1; //TODO
 		
 		generateGeneralHolidays();
-
-//		// TODO: put in separate function
-//	   	holidays.put( 1, new Event("Neujahr"));
-//	   	holidays.put( 6, new Event("Heilige 3 Koenige"));
-//	   	holidays.put( 31+14, new Event("Valentinstag"));
-	   	
+		
 		/*
 		 *  default: Europaeisches Format
 		 */
@@ -482,6 +503,7 @@ public class Kalender implements IKalender {
 				int year = liesJahr();
 			
 				generateHolidaysForCurrentYear( year);
+				generateGeneralHolidays();
 				
 				StringBuffer wholeyear = new StringBuffer();
 				for( int monat = 1; monat <= 12; monat++ ){
@@ -500,6 +522,7 @@ public class Kalender implements IKalender {
 				int month = liesMonat();
 
 				generateHolidaysForCurrentYear( year);
+				//generateGeneralHolidays();
 				
 				StringBuffer output = new StringBuffer();
 				String headlineFormat = getKopfzeileMonatsblatt( year, month);
