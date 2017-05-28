@@ -22,7 +22,7 @@ public class Kalender implements IKalender {
 	Ausgaben ausgabe; 
 	Eingaben eingabe;
 	// Deklarierung der Variable modus  fuer die Kalenderblatt-Funktion mit und ohne Feiertagen
-	int modus = 0;
+	int modus = 1;
 	
 	HashMap<Integer, Event> holidays = new HashMap<Integer, Event>();
 	HashMap<Integer, Event> holidaysforcurrent;
@@ -39,9 +39,7 @@ public class Kalender implements IKalender {
 	 int calFormatSelection = 0; 
 	 
 	 
-	 /* void generateGeneralHolidays
-	  * -----------------------------------------------------------------------------
-	  * @param: int
+	 /* void generateGeneralHolidays()
 	  * -----------------------------------------------------------------------------
 	  * Hilfsmethode zum Befuellen der HashMap mit festen Feiertagen
 	  */
@@ -54,7 +52,7 @@ public class Kalender implements IKalender {
 	   	 holidays.put( 121, new Event("1. Mai"));
 	   	 holidays.put( 227, new Event("Maria Himmelfahrt"));
 	   	 holidays.put( 276, new Event("Tag der dt. Einheit"));
-	     holidays.put(304, new Event("Reforamtionstag"));
+	     holidays.put(304, new Event("Reformationstag"));
 	   	 holidays.put(305, new Event("Allerheiligen"));     
 	   	 holidays.put( 358,new Event("Weihnachten"));
 	   	 holidays.put(359, new Event("1. Weihnachtstag"));
@@ -62,7 +60,7 @@ public class Kalender implements IKalender {
 	   	 holidays.put(365, new Event("Silvester"));
 	 }
 	 
-	 /* void generateHolidayForCurrentYear
+	 /* void generateHolidayForCurrentYear()
 	  * -----------------------------------------------------------------------------
 	  * @param: int
 	  * -----------------------------------------------------------------------------
@@ -111,22 +109,27 @@ public class Kalender implements IKalender {
 			
 		
 		  // fuer die Adventssonntage
-		 int tagesnummer = calFuncs.tagesnummer( 1, 12, year);
+		 int tagesnummer = calFuncs.tagesnummer( 24, 12, year);
 		 int weekday = calFuncs.wochentag_im_jahr( year, tagesnummer);  
-		 Integer nradventssonntag = 1;
+		 Integer nradventssonntag = 4;
 		 int advent4 = 0;
 		 
-		 for( int i = 1; i<=24; i++) {
+		 while( nradventssonntag > 0){
 			 if(0 == weekday) {
 				 holidaysforcurrent.put( tagesnummer, new Event(nradventssonntag.toString() + ". Adventssonntag"));
-				 nradventssonntag++;
-				 advent4 = tagesnummer;
+				 if(4 == nradventssonntag){
+					 advent4 = tagesnummer; // 4. Advent, beim ersten ! Durchlauf speichern
+				 }
+				 nradventssonntag--;
 			 }
-			 weekday = (weekday + 1) % 7;
-			 tagesnummer++;
+			 weekday--;
+			 if( weekday < 0) {
+				 weekday = 6;
+			 }
+			 tagesnummer--;
 		 }
 		 // fuer den Buss- und Bettag
-		 int tagesnummerHeiligAbend = tagesnummer - 1;
+		 int tagesnummerHeiligAbend = calFuncs.tagesnummer( 24, 12, year);
 		 tagesnummer = calFuncs.tagesnummer( 1, 11, year);
 		 // ?: int weekdayBettag = calFuncs.wochentag_im_jahr( year, tagesnummer); 
 		 if( tagesnummerHeiligAbend == advent4){
@@ -301,16 +304,16 @@ public class Kalender implements IKalender {
 		else if(monat == 2){
 			daysInMonth = 28;
 			if(pruefSchaltjahr){ //geschachteltes if, da es sonst das naechste Statement nicht ueberpruefen wuerde
-				assert( false); // TODO "Schaltjahr: Weihnachten etc. muss angepasst werden"
 				daysInMonth = 29;
 			}
 		}
 
+		//fuer die Ausgabe der Feiertage im jeweiligen Monat
 		ArrayList<String> holidaysinmonth = new ArrayList<String>();
 		
 		for (daynumber = 1; daynumber <= daysInMonth; daynumber++) {
 			
-			// um fuehrende 0 bei Tagen von 1-9 hinzuzufuegen
+			
 			 	if (modus == 1){
 				
 				Event cday = holidaysforcurrent.get(tagesnummer); //holt sich aus HashMap das Element zur Tagesnummer; cday = currentday
@@ -321,13 +324,16 @@ public class Kalender implements IKalender {
 				}
 				else {
 					StringBuffer line = new StringBuffer();
+					if( daynumber < 10) {
+						line.append( "0");
+					}
 					line.append( daynumber);
 					line.append( ". : ");
 					line.append( cday.name);
 					holidaysinmonth.add( line.toString()); 
 				}
 				
-				if( pruefFeiertag) { //TODO
+				if( pruefFeiertag) { 
 					
 					if (daynumber <= 9) {
 						monatsBlatt.append("0");
@@ -477,7 +483,6 @@ public class Kalender implements IKalender {
 		
 		eingabe = new Eingaben();
 		ausgabe = new Ausgaben();
-		modus = 1; //TODO
 		
 		generateGeneralHolidays();
 		
@@ -506,9 +511,6 @@ public class Kalender implements IKalender {
 				
 				modus = -1;
 				int year = liesJahr();
-			
-				generateHolidaysForCurrentYear( year);
-				generateGeneralHolidays();
 				
 				StringBuffer wholeyear = new StringBuffer();
 				for( int monat = 1; monat <= 12; monat++ ){
@@ -522,12 +524,9 @@ public class Kalender implements IKalender {
 			}
 			else if(inputMain == 2){
 				
-				// modus = -1;
+				modus = -1;
 				int year = liesJahr();
 				int month = liesMonat();
-
-				generateHolidaysForCurrentYear( year);
-				//generateGeneralHolidays();
 				
 				StringBuffer output = new StringBuffer();
 				String headlineFormat = getKopfzeileMonatsblatt( year, month);
@@ -539,9 +538,11 @@ public class Kalender implements IKalender {
 			}
 			else if(inputMain == 3){
 				
-				int modus = 1; // Kalender mit Feiertagen
+				modus = 1; // Kalender mit Feiertagen
 				int year = liesJahr();
-				
+
+				generateHolidaysForCurrentYear( year);
+
 				StringBuffer wholeyear = new StringBuffer();
 				for( int monat = 1; monat <= 12; monat++ ){
 					String headlineFormat = getKopfzeileMonatsblatt( year, monat);
@@ -556,6 +557,8 @@ public class Kalender implements IKalender {
 				modus = 1;
 				int year = liesJahr();
 				int month = liesMonat();
+
+				generateHolidaysForCurrentYear( year);
 
 				StringBuffer output = new StringBuffer();
 				String headlineFormat = getKopfzeileMonatsblatt( year, month);
