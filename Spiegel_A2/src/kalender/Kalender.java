@@ -260,7 +260,49 @@ public class Kalender implements IKalender {
 		
 		return strmonth;
 	 }
+		
+	 /*
+	  * String getWochentagsname()
+	  * ------------------------------------------------------------------------------------
+	  * @param: int monat
+	  * ------------------------------------------------------------------------------------
+	  * @return: String strmonth
+	  * ------------------------------------------------------------------------------------
+	  * Hilfsmethode switch fuer die Rueckgabe des Monatsnamen als String
+	  */
+	 public String getWochentagsname( int wochentag){
+		 
+		String strwochentag = null;
+		
+		switch (wochentag){
 			
+			case 0: {
+				strwochentag = new String("SO");
+				break; }
+			case 1: {
+				strwochentag = new String("MO");
+				break; }
+			case 2: {
+				strwochentag = new String("DI");
+				break; }
+			case 3: {
+				strwochentag = new String("MI");
+				break; }
+			case 4: {
+				strwochentag = new String("DO");
+				break; }
+			case 5: {
+				strwochentag = new String("FR"); 
+				break; }
+			case 6: {
+				strwochentag = new String("SA");
+				break; }
+			default:
+				System.err.println("Ungueltige Eingabe");	
+		}
+		
+		return strwochentag;
+	 }
 			
 	public String getMonatsblatt(int jahr, int monat) {
 		
