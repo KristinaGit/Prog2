@@ -576,25 +576,28 @@ public class Kalender implements IKalender {
 					calFormatSelection = 1;
 				}
 			}
-//			else if(inputMain == 6){
+			else if(inputMain == 6){
 //				boolean abfrage = eingabe.readInputJN( "Geben Sie [j] ein, wenn Sie mit Events und [n], wenn Sie keine Events angezeigt haben moechten: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
 //				if( abfrage == true) {
 //					withEvents = 0;
 //				}else {
 //					noEvents = 1;
-			}
-		}
- }
-
+			
+				Jahresplaner plan = new Jahresplaner(2017); // Jahr
+			    
+		        String tmp = plan.gibJahresplan(1, 6); // von Jan bis Juni
+ 
+				ausgabe.printToSys( tmp.toString());;
   
-//				
-//			}else if(inputMain == 0){
-//				ausgabe.printToSys("Programm wird beendet.");
-//				programmEnde = true;
-//			}
+				
+			}else if(inputMain == 0){
+				ausgabe.printToSys("Programm wird beendet.");
+				programmEnde = true;
+			}
 
-	//	}
-//	}
+		}
+	}
+}
 	
 
  
