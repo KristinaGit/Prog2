@@ -61,6 +61,30 @@ public class Jahresplaner {
     	
     	return monatInZeilen;
     }
+    
+    /*
+     * public getKopfzeileJahresplan(int jahr, int monat)
+     * ------------------------------------------------
+     * @param int jahr
+     * @param int monat
+     * ------------------------------------------------
+     * Hilfsmethode fuer die Kopfzeile des Jahresplaner
+     */
+    
+    public String getKopfzeileJahresplan(int jahr, int monat){
+    	
+    	String monthName = kalender.getMonatsname(monat);  
+    	
+    	StringBuffer kopfZeile = new StringBuffer();
+    	
+    	kopfZeile.append(monthName);
+    	kopfZeile.append("  ");
+    	kopfZeile.append(jahr);
+    	kopfZeile.append("          "); //10 Leerzeichen
+    	
+    		
+        return kopfZeile.toString();
+    	}
 
     /**
      * Der Jahresplan für die angegebenen Monate wird als String zurück gegeben.
@@ -85,6 +109,8 @@ public class Jahresplaner {
      * @return String - der Jahresplan
      */
     public String gibJahresplan(int von, int bis) {
+    	
+    	
     	return null;
     }
 }
