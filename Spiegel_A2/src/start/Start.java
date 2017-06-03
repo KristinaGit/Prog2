@@ -10,7 +10,7 @@ public class Start
 {
     public static void main(String[] args) {
       
-    	//(new Kalender()).auswahlMenue();
+    	// (new Kalender()).auswahlMenue();
     	
     	int monat = 1;
     	
@@ -18,8 +18,9 @@ public class Start
 		LinkedList<String> monatplan = plan.baueMonat(monat);
 	    
         String tmp = plan.gibJahresplan(1, 6); // von Jan bis Juni
+        String kopfzeile = plan.getKopfzeileJahresplan(2017, 1);
         
-        System.out.println(tmp);
+        System.out.println(kopfzeile);
 
 		//ausgabe.printToSys( tmp.toString());;
 

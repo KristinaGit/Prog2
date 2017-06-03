@@ -71,20 +71,24 @@ public class Jahresplaner {
      * Hilfsmethode fuer die Kopfzeile des Jahresplaner
      */
     
-    public String getKopfzeileJahresplan(int jahr, int monat){
-    	
-    	String monthName = kalender.getMonatsname(monat);  
+    public String getKopfzeileJahresplan(int jahr, int monat) {
+    	  
     	
     	StringBuffer kopfZeile = new StringBuffer();
     	
-    	kopfZeile.append(monthName);
-    	kopfZeile.append("  ");
-    	kopfZeile.append(jahr);
-    	kopfZeile.append("          "); //10 Leerzeichen
-    	
+    	for(int i = 1; i <= 12; i++){
+    		
+    		String monthName = kalender.getMonatsname(i);
+    		
+	    	kopfZeile.append(monthName);
+	    	kopfZeile.append("  ");
+	    	kopfZeile.append(jahr);
+	    	//10 Leerzeichen
+	    	kopfZeile.append("          "); 
+    	}
     		
         return kopfZeile.toString();
-    	}
+    }
 
     /**
      * Der Jahresplan für die angegebenen Monate wird als String zurück gegeben.
