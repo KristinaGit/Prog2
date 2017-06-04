@@ -12,6 +12,8 @@ public class Jahresplaner {
     private int tag = 1;
     private final int columnWidth = 40; //Konstante fuer eine Spaltenbreite einer Zeile des Jahresplaners
     
+    boolean mitFeiertagen = true;
+    
     Kalender kalender = new Kalender();
     
     public Jahresplaner(int jahr) {
@@ -57,21 +59,27 @@ public class Jahresplaner {
 	    	
 	    	int numWhitespaces = columnWidth - zeile.length() - 2 - 6;
 	    	
-	    	//holt sich aus HashMap das Element zur Tagesnummer
-	    	Event cday = kalender.holidaysforcurrent.get(tagesnummer); 
-			if( null != cday) {
-				numWhitespaces = numWhitespaces - cday.name.length() -1;
-				if( numWhitespaces < 0) {
-					StringBuffer str = new StringBuffer(cday.name);
-					str.delete( str.length() + numWhitespaces, str.length());
-					zeile.append( str.toString());
-					numWhitespaces = 1;
+	    	if( mitFeiertagen) {
+	    		
+		    	//holt sich aus HashMap das Element zur Tagesnummer
+		    	Event cday = kalender.holidaysforcurrent.get(tagesnummer); 
+		    	// pruefe, ob kein Feiertag vorliegt
+				if( null != cday) {
+					numWhitespaces = numWhitespaces - cday.name.length() -1;
+					// fuer den Fall, dass holidayname laenger als Spaltenbreite ist und Formatierung zerbricht
+					if( numWhitespaces < 0) {
+						StringBuffer str = new StringBuffer(cday.name);
+						str.delete( str.length() + numWhitespaces, str.length());
+						zeile.append( str.toString());
+						numWhitespaces = 1;
+					}
+					//mit Feiertag
+					else {
+						zeile.append(" ");
+						zeile.append( cday.name);
+					}
 				}
-				else {
-					zeile.append(" ");
-					zeile.append( cday.name);
-				}
-			}
+	    	}
 			for( int i = 0; i < numWhitespaces; i++) {
 	    		zeile.append(" ");
 	    	}

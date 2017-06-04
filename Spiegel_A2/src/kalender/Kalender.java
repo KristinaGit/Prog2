@@ -641,20 +641,22 @@ public class Kalender implements IKalender {
 				}
 			}
 			else if(inputMain == 6){
+				
+				Jahresplaner plan = new Jahresplaner(2017); // Jahr
+			    
 				boolean abfrage = eingabe.readInputJN( "Moechten Sie Events mit ausgegeben haben? Geben Sie [j] fuer Ja und [n] fuer Nein ein: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
 				if( abfrage == true) {
 					modus = 1;
+					plan.mitFeiertagen = true;
 				}else {
 					modus = -1;
-			
-				Jahresplaner plan = new Jahresplaner(2017); // Jahr
-			    
-		        String tmp = plan.gibJahresplan(1, 6); // von Jan bis Juni
- 
-				ausgabe.printToSys( tmp.toString());;
+					plan.mitFeiertagen = false;
 				}
-				
-			}else if(inputMain == 0){
+			
+		        String tmp = plan.gibJahresplan( 1, 6); // von Jan bis Juni
+				ausgabe.printToSys( tmp.toString());;	
+			}
+			else if(inputMain == 0){
 				ausgabe.printToSys("Programm wird beendet.");
 				programmEnde = true;
 			}
