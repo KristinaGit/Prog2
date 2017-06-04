@@ -15,14 +15,9 @@ public class Start
     	int monat = 1;
     	
 		Jahresplaner plan = new Jahresplaner(2017); // Jahr
-		LinkedList<String> monatplan = plan.baueMonat(monat);
-	    
+		
         String tmp = plan.gibJahresplan(1, 6); // von Jan bis Juni
-        String kopfzeile = plan.getKopfzeileJahresplan(2017, 1);
-        
-        System.out.println(kopfzeile);
-
-		//ausgabe.printToSys( tmp.toString());;
+        System.out.println( tmp);
 
     }
 }

@@ -15,7 +15,7 @@ public class Jahresplaner {
     Kalender kalender = new Kalender();
     
     public Jahresplaner(int jahr) {
-
+    	kalender.generateHolidaysForCurrentYear( jahr);
     }
 
     /**
@@ -45,15 +45,51 @@ public class Jahresplaner {
     		
     		StringBuffer zeile = new StringBuffer();
         	
-	    	zeile.append(tagesnummer);
-	    	zeile.append("|");
+	    	//zeile.append(tagesnummer);
+	    	//zeile.append("|");
 	    	zeile.append(kalender.getWochentagsname(wochentag));
 	    	zeile.append("|");
+	    		if( daynumber < 10) {
+	    			zeile.append( "0");
+	    		}
 	    	zeile.append(daynumber);
-	    	int numWhitespaces = columnWidth - zeile.length();
-	    	for( int i = 0; i < numWhitespaces; ++i) {
+	    	zeile.append("|");
+	    	
+	    	int numWhitespaces = columnWidth - zeile.length() - 2 - 6;
+	    	
+	    	//holt sich aus HashMap das Element zur Tagesnummer
+	    	Event cday = kalender.holidaysforcurrent.get(tagesnummer); 
+			if( null != cday) {
+				numWhitespaces = numWhitespaces - cday.name.length() -1;
+				if( numWhitespaces < 0) {
+					StringBuffer str = new StringBuffer(cday.name);
+					str.delete( str.length() + numWhitespaces, str.length());
+					zeile.append( str.toString());
+					numWhitespaces = 1;
+				}
+				else {
+					zeile.append(" ");
+					zeile.append( cday.name);
+				}
+			}
+			for( int i = 0; i < numWhitespaces; i++) {
 	    		zeile.append(" ");
 	    	}
+	    	
+	    	zeile.append("|");
+	    		
+	    	if(tagesnummer < 10){
+    			zeile.append("  ");
+    			zeile.append(tagesnummer);
+    		}
+	    	else if( tagesnummer < 100){
+    			zeile.append(" ");
+    			zeile.append(tagesnummer);
+    		}else{
+    			zeile.append(tagesnummer);
+    		}
+	    	zeile.append("    ");
+	    	
 	    	monatInZeilen.add(zeile.toString());
 	    	
 	    	wochentag = (wochentag + 1) % 7;	
@@ -74,7 +110,6 @@ public class Jahresplaner {
     
     public String getKopfzeileJahresplan(int jahr, int monat) {
     	  
-    	// TODO 12 als variable definieren um Monat mit von bis spaeter eingeben zu geben
     	StringBuffer kopfZeile = new StringBuffer();
     	
 		String monthName = kalender.getMonatsname(monat);
@@ -150,7 +185,6 @@ public class Jahresplaner {
 	    	jahresPlan.append("\n");
     	}
  
-    	System.out.println(jahresPlan.toString());
-    	return null;
+    	return(jahresPlan.toString());  	
     }
 }

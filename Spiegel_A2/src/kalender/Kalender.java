@@ -38,6 +38,13 @@ public class Kalender implements IKalender {
 	 */
 	 int calFormatSelection = 0; 
 	 
+	 /*
+	  * Default-Konstruktor (mit Klassennamen ohne Argumente), um sicher zu stellen, dass feste Feiertage genau(!) 1x initialisiert werden
+	  */
+	 Kalender() {
+		 // 
+		 generateGeneralHolidays();
+	 }
 	 
 	 /* void generateGeneralHolidays()
 	  * -----------------------------------------------------------------------------
@@ -67,7 +74,7 @@ public class Kalender implements IKalender {
 	  * Hilfsmethode zum Befuellen der HashMap mit Osterabhaengigen Feiertagen und denen, die durch das Schaltjahr beeinflusst werden
 	  */
 	 void generateHolidaysForCurrentYear( int year) {
-		 
+	 
 		 //shallowcopy von holidays
 		 boolean pruefSchaltjahr= calFuncs.istSchaltjahr(year);
 		 if( ! pruefSchaltjahr) {
@@ -542,7 +549,6 @@ public class Kalender implements IKalender {
 		eingabe = new Eingaben();
 		ausgabe = new Ausgaben();
 		
-		generateGeneralHolidays();
 		
 		/*
 		 *  default: Europaeisches Format
@@ -635,18 +641,18 @@ public class Kalender implements IKalender {
 				}
 			}
 			else if(inputMain == 6){
-//				boolean abfrage = eingabe.readInputJN( "Geben Sie [j] ein, wenn Sie mit Events und [n], wenn Sie keine Events angezeigt haben moechten: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
-//				if( abfrage == true) {
-//					withEvents = 0;
-//				}else {
-//					noEvents = 1;
+				boolean abfrage = eingabe.readInputJN( "Moechten Sie Events mit ausgegeben haben? Geben Sie [j] fuer Ja und [n] fuer Nein ein: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
+				if( abfrage == true) {
+					modus = 1;
+				}else {
+					modus = -1;
 			
 				Jahresplaner plan = new Jahresplaner(2017); // Jahr
 			    
 		        String tmp = plan.gibJahresplan(1, 6); // von Jan bis Juni
  
 				ausgabe.printToSys( tmp.toString());;
-  
+				}
 				
 			}else if(inputMain == 0){
 				ausgabe.printToSys("Programm wird beendet.");
@@ -655,7 +661,9 @@ public class Kalender implements IKalender {
 
 		}
 	}
-}
+ }
+ 	
+
 	
 
  
