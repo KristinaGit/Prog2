@@ -1,6 +1,8 @@
 package kalender;
 
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class Jahresplaner {
 
@@ -8,6 +10,7 @@ public class Jahresplaner {
     private LinkedList <LinkedList<String>> planliste = new LinkedList <> ();
     private int jahr = 2017; // Default aktuelles Jahr
     private int tag = 1;
+    private final int columnWidth = 40; //Konstante fuer eine Spaltenbreite einer Zeile des Jahresplaners
     
     Kalender kalender = new Kalender();
     
@@ -16,7 +19,7 @@ public class Jahresplaner {
     }
 
     /**
-     * der angegebene Monat für den Jahresplan wird zusammengebaut in der Form
+     * der angegebene Monat fuer den Jahresplan wird zusammengebaut in der Form
      * Mai 2017        
      * Mo|01|            |121
      * Di|02|            |122
@@ -36,23 +39,21 @@ public class Jahresplaner {
     	int wochentag = kf.wochentag_im_jahr(monat, tagesnummer);
     	int daysInMonth = kalender.getMonatslaenge(wochentag, monat);
 
-    	StringBuffer zeile = new StringBuffer();
-        zeile.append(kalender.getMonatsname(monat));
-    	zeile.append(" ");
-    	zeile.append(jahr);
-    	zeile.append("\n");
-    	monatInZeilen.add(zeile.toString());
+    	monatInZeilen.add( getKopfzeileJahresplan(jahr, monat));
     	
     	for( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
     		
-    		zeile = new StringBuffer();
+    		StringBuffer zeile = new StringBuffer();
         	
 	    	zeile.append(tagesnummer);
 	    	zeile.append("|");
 	    	zeile.append(kalender.getWochentagsname(wochentag));
 	    	zeile.append("|");
 	    	zeile.append(daynumber);
-	    	zeile.append("\n");
+	    	int numWhitespaces = columnWidth - zeile.length();
+	    	for( int i = 0; i < numWhitespaces; ++i) {
+	    		zeile.append(" ");
+	    	}
 	    	monatInZeilen.add(zeile.toString());
 	    	
 	    	wochentag = (wochentag + 1) % 7;	
@@ -73,25 +74,25 @@ public class Jahresplaner {
     
     public String getKopfzeileJahresplan(int jahr, int monat) {
     	  
-    	
+    	// TODO 12 als variable definieren um Monat mit von bis spaeter eingeben zu geben
     	StringBuffer kopfZeile = new StringBuffer();
     	
-    	for(int i = 1; i <= 12; i++){
-    		
-    		String monthName = kalender.getMonatsname(i);
-    		
-	    	kopfZeile.append(monthName);
-	    	kopfZeile.append("  ");
-	    	kopfZeile.append(jahr);
-	    	//10 Leerzeichen
-	    	kopfZeile.append("          "); 
+		String monthName = kalender.getMonatsname(monat);
+		
+    	kopfZeile.append(monthName);
+    	kopfZeile.append("  ");
+    	kopfZeile.append(jahr);
+    	
+    	int numWhitespaces = columnWidth - kopfZeile.length();
+    	for( int i = 0; i < numWhitespaces; ++i) {
+    		kopfZeile.append(" ");
     	}
-    		
-        return kopfZeile.toString();
+    	
+    	return kopfZeile.toString();
     }
 
     /**
-     * Der Jahresplan für die angegebenen Monate wird als String zurück gegeben.
+     * Der Jahresplan fuer die angegebenen Monate wird als String zurück gegeben.
      * Hinweis zur Implementierung: 
      * Die Monatspläne der angegebenen Monate werden in einer
      * Container-Klasse LinkedList <LinkedList<String>> der "Planliste" zusammengefasst.
@@ -114,7 +115,42 @@ public class Jahresplaner {
      */
     public String gibJahresplan(int von, int bis) {
     	
+    	StringBuffer jahresPlan = new StringBuffer();
+    	//StringBuffer fuer den Whitespace, der die Leerzeichen nach der Jahreszahl zum naechsten Monat dynamisch anlegen soll.
+    	StringBuffer columnWidthWS = new StringBuffer();
+    	//prueft, ob es noch Whitespace aufzufuellen gibt, indem es die Konstante columnWidth vergleicht und bei kleinerem Wert entsprechten " " anhaengt
+    	for( int i = 0; i < columnWidth; i++) {
+    		columnWidthWS.append( " " );
+    	}
+    	// prueft die Monate, die angezeigt werden sollen, um diese dann unter Aufruf von baueMonat() hinzu zufuegen
+    	for(int i = von; i <= bis; i++){
+    		planliste.add( baueMonat(i));
+    	}
     	
+    	//ArrayList anlegen, um die Iteratoren jeder einzelnen (je wie hoch von bis gesetzt ist) LinkedList abzuspeichern
+    	ArrayList< ListIterator<String> > iterList = new ArrayList< ListIterator<String> >();
+    	ListIterator< LinkedList<String> > planlistIter = planliste.listIterator();
+    	while( planlistIter.hasNext()) {
+    		//holt sich fuer jede LinkedList mit add einen Iterator, die Anzahl der Iteratoren erhaelt er aus planliste durch planliste.add(baueMonat(i)
+    		iterList.add( planlistIter.next().listIterator());
+    	}
+    	
+    	boolean isempty = false;
+    	while( ! isempty) {
+    		isempty = true;
+	    	for( int i = 0; i < iterList.size(); ++i) {
+	    		if( iterList.get(i).hasNext()) {
+	    			isempty = false;
+	    			jahresPlan.append( iterList.get(i).next());
+	    		}
+	    		else {
+	    			jahresPlan.append( columnWidthWS.toString());
+	    		}
+	    	}
+	    	jahresPlan.append("\n");
+    	}
+ 
+    	System.out.println(jahresPlan.toString());
     	return null;
     }
 }
