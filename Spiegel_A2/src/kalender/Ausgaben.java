@@ -1,4 +1,5 @@
 package kalender;
+import java.io.*;
 
 public class Ausgaben  {		
 
@@ -15,6 +16,16 @@ public class Ausgaben  {
 	
 	public void printToFile ( String filename, String content){
 		// TODO: write to file
+		try {
+			FileWriter fw = new FileWriter( filename);
+            fw.write( content);
+            fw.close();
+
+        } catch (IOException iox) {
+            //do stuff with exception
+            iox.printStackTrace();
+        }
+  
 	}
 }
 	
