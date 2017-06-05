@@ -41,8 +41,7 @@ public class Kalender implements IKalender {
 	 /*
 	  * Default-Konstruktor (mit Klassennamen ohne Argumente), um sicher zu stellen, dass feste Feiertage genau(!) 1x initialisiert werden
 	  */
-	 Kalender() {
-		 // 
+	 public Kalender() { 
 		 generateGeneralHolidays();
 	 }
 	 
@@ -599,6 +598,25 @@ public class Kalender implements IKalender {
 				output.append(monthStr);
 		
 				ausgabe.printToSys( output.toString());
+				
+				// save to file
+				boolean saveToFile = eingabe.readInputJN("Moechten Sie die Ansicht in einer Datei abspeichern?\nBitte geben Sie [j] fuer Ja und [n] fuer Nein ein: ",
+						"Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
+				if(saveToFile == true){
+					
+					String fileName = "default_file_name.txt";
+					
+					boolean useCustomFileName = eingabe.readInputJN("Moechten Sie fuer die Datei einen Namen waehlen?\nBitte geben Sie [j] fuer Ja und [n] fuer Nein ein: ", 
+								"Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
+					// speicher Datei ab
+					if( useCustomFileName == true) {
+						fileName = eingabe.readInputString("Bitte geben Sie den Dateinamen ein: ", 
+								"Ungueltige Eingabe. Bitte versuchen Sie es erneut!");
+					}
+					
+					ausgabe.printToFile( fileName, output.toString());
+				}
+				
 			}
 			else if(inputMain == 3){
 				

@@ -12,6 +12,10 @@ public class Ausgaben  {
     	 System.out.println(out);   
 		
 	 }
+	
+	public void printToFile ( String filename, String content){
+		// TODO: write to file
+	}
 }
 	
 

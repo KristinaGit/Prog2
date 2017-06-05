@@ -10,7 +10,7 @@ public class Start
 {
     public static void main(String[] args) {
       
-    	// (new Kalender()).auswahlMenue();
+    	 (new Kalender()).auswahlMenue();
     	
     	int monat = 1;
     	

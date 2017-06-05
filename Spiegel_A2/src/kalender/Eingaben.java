@@ -104,5 +104,29 @@ public class Eingaben {
 			
 		return returnval;	
 	}
+	
+	public String readInputString( String query, String errmsg) {
+
+		// auf ungueltigen Wert initialisieren
+		boolean validinput = false;
+		String input;
+		
+		do{
+			ausgabe.printToSys( query); // Dateiname Abfrage
+			input = scan.next(); // Einlesen der Nutzereingabe
+
+			if(input.length()== 0){ //fuer den Fall, Nutzer hat nur enter eingegeben
+				ausgabe.printToSys(errmsg);
+			}
+			else {
+				validinput = true;
+			}
+		}
+		while(! validinput); // = true
+			
+		return input;	
+	}
+	
+	
 
 }
