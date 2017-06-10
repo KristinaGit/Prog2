@@ -68,15 +68,15 @@ public class Eingaben {
 
 	
 	/** readInputJN
-	* Die Hilfsfunktion implementiert eine  Ja/Nein-Anfrage an den Nutzer
-	* und validiert die Eingabe
 	* ----------------------------
 	* @param query (String) Nutzeranfrage fuer Nutzer
 	* @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
 	* 
 	* ----------------------------
-	* @return boolean returnval ((J || j == true) && ( N || n == false))
+	* @return returnval (boolean) ((J || j == true) && ( N || n == false))
 	* ----------------------------
+	* Die Hilfsfunktion implementiert eine  Ja/Nein-Anfrage an den Nutzer
+	* und validiert die Eingabe
 	*/
 	public boolean readInputJN( String query, String errmsg) {
 
@@ -105,11 +105,23 @@ public class Eingaben {
 		return returnval;	
 	}
 	
+	/**readInputString
+	 * ----------------------------
+	* @param query (String) Nutzeranfrage fuer Nutzer
+	* @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
+	* 
+	* ----------------------------
+	* @return input (String) gibt String zurueck, der zuerst eingelesen und dann auf Gueltigkeit validiert wird
+	* ----------------------------
+	 * 
+	 * 
+	 */
 	public String readInputString( String query, String errmsg) {
 
 		// auf ungueltigen Wert initialisieren
 		boolean validinput = false;
 		String input;
+		String text = ".txt";
 		
 		do{
 			ausgabe.printToSys( query); // Dateiname Abfrage
@@ -124,7 +136,7 @@ public class Eingaben {
 		}
 		while(! validinput); // = true
 			
-		return input;	
+		return (input+text);	
 	}
 	
 	

@@ -46,9 +46,6 @@ public class Jahresplaner {
     	for( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
     		
     		StringBuffer zeile = new StringBuffer();
-        	
-	    	//zeile.append(tagesnummer);
-	    	//zeile.append("|");
 	    	zeile.append(kalender.getWochentagsname(wochentag));
 	    	zeile.append("|");
 	    		if( daynumber < 10) {
@@ -57,7 +54,7 @@ public class Jahresplaner {
 	    	zeile.append(daynumber);
 	    	zeile.append("|");
 	    	
-	    	int numWhitespaces = columnWidth - zeile.length() - 2 - 6;
+	    	int numWhitespaces = columnWidth - zeile.length() - 2 - 6; //-2 um vor der nächsten Spalte whitespace zu haben
 	    	
 	    	if( mitFeiertagen) {
 	    		
