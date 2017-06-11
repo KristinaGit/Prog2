@@ -698,7 +698,7 @@ public class Kalender implements IKalender {
 						 "Ungueltige Eingabe. Bitte geben Sie eine gueltige Jahresszahl ein.", 
 						 1582, 9999); //1582 Start fuer gregor. Kalender, 9999 ,damit Format nicht gest�rt wird, wenn User >10000 
 				
-				// Agfrage Jahresplaner - Range
+				// Agfrage Jahresplaner - Range, Integer benutzt, da er int nicht genommen hat
 				Integer planVon = eingabe.readInputInt( "Bitte geben Sie ein, mit welchem Monat der Jahresplan starten soll.", 
 						  "Ungueltige Eingabe. Bitte geben Sie eine gueltige Monatszahl ein.",
 						  1, 12); 

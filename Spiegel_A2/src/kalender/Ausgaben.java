@@ -39,6 +39,9 @@ public class Ausgaben  {
             //Exeptionhandling
             io.printStackTrace();
         }
+		catch (Exception e) {
+			printToSys( "Ungueltiger Dateiname! Bitte beginnen Sie erneut.");
+		}
   
 	}
 	

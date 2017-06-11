@@ -9,15 +9,8 @@ import kalender.Kalender;
 public class Start
 {
     public static void main(String[] args) {
-      
+    	
     	 (new Kalender()).auswahlMenue();
     	
-    	int monat = 1;
-    	
-		Jahresplaner plan = new Jahresplaner(2017); // Jahr
-		
-        String tmp = plan.gibJahresplan(1, 6); // von Jan bis Juni
-        System.out.println( tmp);
-
     }
 }
