@@ -49,7 +49,6 @@ public class Eingaben {
 		
 				if( (readval < lbound) || (readval > rbound)){ 
 					ausgabe.printToSys( errmsg);
-					scan.next();	
 				}
 			}
 			catch (InputMismatchException e){
@@ -59,6 +58,7 @@ public class Eingaben {
 			// für alle weiteren Exceptions, die auftreten koennen und Programm beenden sollen.
 			catch (Exception e) {
 				ausgabe.printToSys( "Unbehandelbare Exception aufgetreten.");
+				scan.next();
 			}
 		} while( (readval < lbound) || (readval > rbound));
 	
