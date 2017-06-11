@@ -18,16 +18,20 @@ public class Eingaben {
 		ausgabe = new Ausgaben(); //Instanziierung, um die Fehlermeldung auszugeben
 	}
 	
-	/*
+	/**
+	 * finalize()
+	 * -----------------------------------------------
 	 * Destruktor
 	 * Freigabe von stdin 
+	 * -----------------------------------------------
 	 * @see java.lang.Object#finalize()
 	 */
 	protected void finalize() {
 		scan.close();
 	}
 	
-	/** readInputInt
+	/**
+	 * readInputInt()
 	 * ----------------------------
 	 * @param query (String) Nutzeranfrage 
 	 * @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
@@ -67,16 +71,17 @@ public class Eingaben {
 	}
 
 	
-	/** readInputJN
-	* ----------------------------
-	* @param query (String) Nutzeranfrage fuer Nutzer
-	* @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
-	* 
-	* ----------------------------
-	* @return returnval (boolean) ((J || j == true) && ( N || n == false))
-	* ----------------------------
-	* Die Hilfsfunktion implementiert eine  Ja/Nein-Anfrage an den Nutzer
-	* und validiert die Eingabe
+	/** 
+	 * readInputJN()
+	 * ----------------------------
+	 * @param query (String) Nutzeranfrage fuer Nutzer
+	 * @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
+	 * 
+	 * ----------------------------
+	 * @return returnval (boolean) ((J || j == true) && ( N || n == false))
+	 * ----------------------------
+	 * Die Hilfsfunktion implementiert eine  Ja/Nein-Anfrage an den Nutzer
+	 * und validiert die Eingabe
 	*/
 	public boolean readInputJN( String query, String errmsg) {
 
@@ -105,17 +110,16 @@ public class Eingaben {
 		return returnval;	
 	}
 	
-	/**readInputString
+	/**
+	 * readInputString()
 	 * ----------------------------
-	* @param query (String) Nutzeranfrage fuer Nutzer
-	* @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
-	* 
-	* ----------------------------
-	* @return input (String) gibt String zurueck, der zuerst eingelesen und dann auf Gueltigkeit validiert wird
-	* ----------------------------
+	 * @param query (String) Nutzeranfrage fuer Nutzer
+	 * @param errmsg (String) Fehlermeldung bei inkorrekter Eingabe
 	 * 
-	 * 
-	 */
+	 * ----------------------------
+	 * @return input (String) gibt String zurueck, der zuerst eingelesen und dann auf Gueltigkeit validiert wird fuer Dateinamen
+	 * ---------------------------- 
+	*/
 	public String readInputString( String query, String errmsg) {
 
 		// auf ungueltigen Wert initialisieren

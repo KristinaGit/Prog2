@@ -4,7 +4,7 @@ package kalender;
  * @Compiler:Eclipse / Version neon.3
  * @author: Kristina Spiegel (mit Uebernahme des Interfaces und der bereitgestellten Klassen von Frau Prof. Bannert)
  * @Erstellungsdatum: 18.05.2017
- * @Letzte Aenderung: 07.06.2017
+ * @Letzte Aenderung: 11.06.2017
  * @Kalender-Aufgabe A2 aus dem Modul Angewandte Programmierung SoSe 2017
  */
 
@@ -45,7 +45,8 @@ public class Kalender implements IKalender {
 		 generateGeneralHolidays();
 	 }
 	 
-	 /* void generateGeneralHolidays()
+	 /**
+	  *  void generateGeneralHolidays()
 	  * -----------------------------------------------------------------------------
 	  * Hilfsmethode zum Befuellen der HashMap mit festen Feiertagen
 	  */
@@ -66,7 +67,8 @@ public class Kalender implements IKalender {
 	   	 holidays.put(365, new Event("Silvester"));
 	 }
 	 
-	 /* void generateHolidayForCurrentYear()
+	 /**
+	  *  void generateHolidayForCurrentYear()
 	  * -----------------------------------------------------------------------------
 	  * @param: int
 	  * -----------------------------------------------------------------------------
@@ -170,7 +172,8 @@ public class Kalender implements IKalender {
 	 
 	 
 	 
-	 /*StringBuffer formatMonth
+	 /**
+	  * StringBuffer formatMonth
 	  * ----------------------------------------------------------------------------------
 	  * @param stryear (String)  Jahreszahl als String
 	  * @param month (String) Monat als String
@@ -209,7 +212,7 @@ public class Kalender implements IKalender {
 	}	
 	
 	 
-	 /*
+	 /**
 	  * String getMonatsname()
 	  * ------------------------------------------------------------------------------------
 	  * @param: int monat
@@ -267,7 +270,7 @@ public class Kalender implements IKalender {
 		return strmonth;
 	 }
 		
-	 /*
+	 /** 
 	  * String getWochentagsname()
 	  * ------------------------------------------------------------------------------------
 	  * @param: int monat
@@ -310,7 +313,7 @@ public class Kalender implements IKalender {
 		return strwochentag;
 	 }
 			
-	 /*
+	 /**
 	  * int getMonatslaenge()
 	  * ------------------------------------------------------------------------------------
 	  * @param: int monat
@@ -542,15 +545,15 @@ public class Kalender implements IKalender {
 		return year;	
 		
 	}
-	/*
-	 * public void saveToFile()
+	/**
+	  *public void saveToFile()
 	  * ------------------------------------------------------------
 	  * @param: String fileName
 	  * @param: String output
 	  * ------------------------------------------------------------------------------------
 	  * Hilfsmethode, um abzufragen, ob und wenn ja welchen Dateinamen der Nutzer speichern moechte
 	  */
-	public void saveToFile(String fileName, String output){
+  public void saveToFile(String fileName, String output){
 		
 		boolean saveToFile = eingabe.readInputJN("Moechten Sie die Ansicht in einer Datei abspeichern?\nBitte geben Sie [j] fuer Ja und [n] fuer Nein ein: ",
 				"Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
@@ -570,170 +573,176 @@ public class Kalender implements IKalender {
 	}
 	
 	
-// 	public void auswahlMenue() {
-//		
-//		eingabe = new Eingaben();
-//		ausgabe = new Ausgaben();
-//		
-//		
-//		/*
-//		 *  default: Europaeisches Format
-//		 */
-//		calFormatSelection = 0; 
-//		boolean programmEnde = false;
-//		
-//		while( false == programmEnde) {
-//		
-//			ausgabe.printToSys("Willkommen im Kalender-Menue.");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[1] " + "Kalender fuer das ganze Jahr");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[2] " + "Ausgabe Monatsblatt");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[3] " + "Kalender mit Feiertagen fuer das ganze Jahr");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[4] " + "Ausgabe Monatsblatt mit Feiertagen");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[5] " + "Kalenderblatt mit Mo beginnend (j/n)");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[6] " + "Jahresplaner mit Events (j/n)");
-//			ausgabe.printToSys("Auswahl:" + "     " + "[0] " + "Programm beenden");
-//
-//			int inputMain = eingabe.readInputInt( "Bitte waehlen Sie ihre gewuenschte Option:", 
-//												  "Ungueltige Eingabe. Bitte geben Sie eine gueltige Zahl ein.",
-//												  0, 6);
-//
-//			if(inputMain == 1){
-//				
-//				modus = -1;
-//				int year = liesJahr();
-//				
-//				StringBuffer wholeyear = new StringBuffer();
-//				for( int monat = 1; monat <= 12; monat++ ){
-//					String headlineFormat = getKopfzeileMonatsblatt( year, monat);
-//					wholeyear.append( headlineFormat);
-//					String monthStr = getMonatsblatt( year, monat);
-//					wholeyear.append(monthStr);
-//				}
-//				ausgabe.printToSys(wholeyear.toString());
-//				
-//				StringBuffer defaultFilename = new StringBuffer();
-//				defaultFilename.append(year);
-//				defaultFilename.append(".txt");
-//				saveToFile( defaultFilename.toString(), wholeyear.toString());
-//				
-//			}
-//			else if(inputMain == 2){
-//				
-//				modus = -1;
-//				int year = liesJahr();
-//				int month = liesMonat();
-//				
-//				StringBuffer output = new StringBuffer();
-//				String headlineFormat = getKopfzeileMonatsblatt( year, month);
-//				output.append( headlineFormat);
-//				String monthStr = getMonatsblatt( year, month);
-//				output.append(monthStr);
-//		
-//				ausgabe.printToSys( output.toString());				
-//				
-//				StringBuffer defaultFilename = new StringBuffer();
-//				defaultFilename.append(year);
-//				defaultFilename.append("_");
-//				defaultFilename.append(month);
-//				defaultFilename.append(".txt");
-//				saveToFile( defaultFilename.toString(), output.toString());
-//			}
-//			else if(inputMain == 3){
-//				
-//				modus = 1; // Kalender mit Feiertagen
-//				int year = liesJahr();
-//
-//				generateHolidaysForCurrentYear( year);
-//
-//				StringBuffer wholeyear = new StringBuffer();
-//				for( int monat = 1; monat <= 12; monat++ ){
-//					String headlineFormat = getKopfzeileMonatsblatt( year, monat);
-//					wholeyear.append( headlineFormat);
-//					String monthStr = getMonatsblatt( year, monat);
-//					wholeyear.append(monthStr);
-//				}
-//				ausgabe.printToSys(wholeyear.toString());
-//				
-//				StringBuffer defaultFilename = new StringBuffer();
-//				defaultFilename.append(year);
-//				defaultFilename.append("_f");			
-//				defaultFilename.append(".txt");
-//				saveToFile( defaultFilename.toString(), wholeyear.toString());			
-//				
-//			}
-//			else if(inputMain == 4) {
-//				
-//				modus = 1;
-//				int year = liesJahr();
-//				int month = liesMonat();
-//
-//				generateHolidaysForCurrentYear( year);
-//
-//				StringBuffer output = new StringBuffer();
-//				String headlineFormat = getKopfzeileMonatsblatt( year, month);
-//				output.append( headlineFormat);
-//				String monthStr = getMonatsblatt( year, month);
-//				output.append(monthStr);
-//		
-//				ausgabe.printToSys( output.toString());
-//				
-//				StringBuffer defaultFilename = new StringBuffer();
-//				defaultFilename.append(year);
-//				defaultFilename.append("_");
-//				defaultFilename.append(month);
-//				defaultFilename.append("_");
-//				defaultFilename.append("f");
-//				defaultFilename.append(".txt");
-//				saveToFile( defaultFilename.toString(), output.toString());
-//							
-//			}
-//			else if(inputMain == 5){
-//				boolean abfrage = eingabe.readInputJN( "Geben Sie [j] fuer Mo und [n] fuer So ein: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
-//				if( abfrage == true) {
-//					calFormatSelection = 0;
-//				}else {
-//					calFormatSelection = 1;
-//				}
-//			}
-//			else if(inputMain == 6){
-//				
-//				Jahresplaner plan = new Jahresplaner(2017); // Jahr
-//			    
-//				boolean abfrage = eingabe.readInputJN( "Moechten Sie Events mit ausgegeben haben? Geben Sie [j] fuer Ja und [n] fuer Nein ein: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
-//				if( abfrage == true) {
-//					modus = 1;
-//					plan.mitFeiertagen = true;
-//				}else {
-//					modus = -1;
-//					plan.mitFeiertagen = false;
-//				}
-//			
-//		        String tmp = plan.gibJahresplan( 1, 6); // von Jan bis Juni
-//				ausgabe.printToSys( tmp.toString());;	
-//				
-//				StringBuffer defaultFilename = new StringBuffer();
-//				defaultFilename.append(2017);
-//				defaultFilename.append("_");
-//				defaultFilename.append("1");
-//				defaultFilename.append("_");
-//				defaultFilename.append("6");
-//				defaultFilename.append("_");
-//				defaultFilename.append("jahresplan");	
-//				
-//				if( 1 == modus) { // diese Schreibweise vorziehen, anstatt modus == 1, um bei einem Tipfehler Bug zu vermeiden, da es sonst zur Variablen Zuweisung kommen koennte			
-//					defaultFilename.append("_");
-//					defaultFilename.append("f");
-//				}
-//				defaultFilename.append(".txt");
-//				saveToFile( defaultFilename.toString(), tmp.toString());
-//			}
-//			else if(inputMain == 0){
-//				ausgabe.printToSys("Programm wird beendet.");
-//				programmEnde = true;
-//			}
-//
-//		}
-//	}
+   public void auswahlMenue() {
+		
+		eingabe = new Eingaben();
+		ausgabe = new Ausgaben();
+		
+		
+		/*
+		 *  default: Europaeisches Format
+		 */
+		calFormatSelection = 0; 
+		boolean programmEnde = false;
+		
+		while( false == programmEnde) {
+		
+			ausgabe.printMainTextMenu();
+
+			int inputMain = eingabe.readInputInt( "Bitte waehlen Sie ihre gewuenschte Option:", 
+												  "Ungueltige Eingabe. Bitte geben Sie eine gueltige Zahl ein.",
+												  0, 6);
+
+			if(inputMain == 1){
+				
+				modus = -1;
+				int year = liesJahr();
+				
+				StringBuffer wholeyear = new StringBuffer();
+				for( int monat = 1; monat <= 12; monat++ ){
+					String headlineFormat = getKopfzeileMonatsblatt( year, monat);
+					wholeyear.append( headlineFormat);
+					String monthStr = getMonatsblatt( year, monat);
+					wholeyear.append(monthStr);
+				}
+				ausgabe.printToSys(wholeyear.toString());
+				
+				StringBuffer defaultFilename = new StringBuffer();
+				defaultFilename.append(year);
+				defaultFilename.append(".txt");
+				saveToFile( defaultFilename.toString(), wholeyear.toString());
+				
+			}
+			else if(inputMain == 2){
+				
+				modus = -1;
+				int year = liesJahr();
+				int month = liesMonat();
+				
+				StringBuffer output = new StringBuffer();
+				String headlineFormat = getKopfzeileMonatsblatt( year, month);
+				output.append( headlineFormat);
+				String monthStr = getMonatsblatt( year, month);
+				output.append(monthStr);
+		
+				ausgabe.printToSys( output.toString());				
+				
+				StringBuffer defaultFilename = new StringBuffer();
+				defaultFilename.append(year);
+				defaultFilename.append("_");
+				defaultFilename.append(month);
+				defaultFilename.append(".txt");
+				saveToFile( defaultFilename.toString(), output.toString());
+			}
+			else if(inputMain == 3){
+				
+				modus = 1; // Kalender mit Feiertagen
+				int year = liesJahr();
+
+				generateHolidaysForCurrentYear( year);
+
+				StringBuffer wholeyear = new StringBuffer();
+				for( int monat = 1; monat <= 12; monat++ ){
+					String headlineFormat = getKopfzeileMonatsblatt( year, monat);
+					wholeyear.append( headlineFormat);
+					String monthStr = getMonatsblatt( year, monat);
+					wholeyear.append(monthStr);
+				}
+				ausgabe.printToSys(wholeyear.toString());
+				
+				StringBuffer defaultFilename = new StringBuffer();
+				defaultFilename.append(year);
+				defaultFilename.append("_f");			
+				defaultFilename.append(".txt");
+				saveToFile( defaultFilename.toString(), wholeyear.toString());			
+				
+			}
+			else if(inputMain == 4) {
+				
+				modus = 1;
+				int year = liesJahr();
+				int month = liesMonat();
+
+				generateHolidaysForCurrentYear( year);
+
+				StringBuffer output = new StringBuffer();
+				String headlineFormat = getKopfzeileMonatsblatt( year, month);
+				output.append( headlineFormat);
+				String monthStr = getMonatsblatt( year, month);
+				output.append(monthStr);
+		
+				ausgabe.printToSys( output.toString());
+				
+				StringBuffer defaultFilename = new StringBuffer();
+				defaultFilename.append(year);
+				defaultFilename.append("_");
+				defaultFilename.append(month);
+				defaultFilename.append("_");
+				defaultFilename.append("f");
+				defaultFilename.append(".txt");
+				saveToFile( defaultFilename.toString(), output.toString());
+							
+			}
+			else if(inputMain == 5){
+				boolean abfrage = eingabe.readInputJN( "Geben Sie [j] fuer Mo und [n] fuer So ein: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
+				if( abfrage == true) {
+					calFormatSelection = 0;
+				}else {
+					calFormatSelection = 1;
+				}
+			}
+			else if(inputMain == 6){
+				
+				//Abfrage Jahr fuer Jahresplaner
+				int planJahr = eingabe.readInputInt( "Bitte geben Sie eine gueltige Jahreszahl ein.", 
+						 "Ungueltige Eingabe. Bitte geben Sie eine gueltige Jahresszahl ein.", 
+						 1582, 9999); //1582 Start fuer gregor. Kalender, 9999 ,damit Format nicht gest�rt wird, wenn User >10000 
+				
+				// Agfrage Jahresplaner - Range
+				Integer planVon = eingabe.readInputInt( "Bitte geben Sie ein, mit welchem Monat der Jahresplan starten soll.", 
+						  "Ungueltige Eingabe. Bitte geben Sie eine gueltige Monatszahl ein.",
+						  1, 12); 
+				Integer planBis = eingabe.readInputInt( "Bitte geben Sie ein, mit welchem Monat der Jahresplan enden soll.", 
+						  "Ungueltige Eingabe. Bitte geben Sie eine gueltige Monatszahl ein.",
+						  1, 12);
+				
+				Jahresplaner plan = new Jahresplaner(planJahr); // Jahr
+		
+				boolean abfrage = eingabe.readInputJN( "Moechten Sie Events mit ausgegeben haben? Geben Sie [j] fuer Ja und [n] fuer Nein ein: " , "Ungueltige Eingabe. Bitte versuchen Sie es erneut: ");
+				if( abfrage == true) {
+					modus = 1;
+					plan.mitFeiertagen = true;
+				}else {
+					modus = -1;
+					plan.mitFeiertagen = false;
+				}
+				
+		        String tmp = plan.gibJahresplan( planVon, planBis); // von Jan bis Juni
+				ausgabe.printToSys( tmp.toString());;	
+				
+				StringBuffer defaultFilename = new StringBuffer();
+				defaultFilename.append(planJahr);
+				defaultFilename.append("_");
+				defaultFilename.append(planVon);
+				defaultFilename.append("_");
+				defaultFilename.append(planBis);
+				defaultFilename.append("_");
+				defaultFilename.append("jahresplan");	
+				
+				if( 1 == modus) { // diese Schreibweise vorziehen, anstatt modus == 1, um bei einem Tippfehler Bug zu vermeiden, da es sonst zur Variablen Zuweisung kommen koennte			
+					defaultFilename.append("_");
+					defaultFilename.append("f");
+				}
+				defaultFilename.append(".txt");
+				saveToFile( defaultFilename.toString(), tmp.toString());
+			}
+			else if(inputMain == 0){
+				ausgabe.printToSys("Programm wird beendet.");
+				programmEnde = true;
+			}
+
+		}
+	}
  }
  	
 

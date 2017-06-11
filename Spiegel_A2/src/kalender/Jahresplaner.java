@@ -17,6 +17,7 @@ public class Jahresplaner {
     Kalender kalender = new Kalender();
     
     public Jahresplaner(int jahr) {
+    	this.jahr = jahr;
     	kalender.generateHolidaysForCurrentYear( jahr);
     }
 
@@ -37,11 +38,11 @@ public class Jahresplaner {
     	
     	LinkedList<String> monatInZeilen = new LinkedList<>();
     	
-    	int tagesnummer = kf.tagesnummer(tag, monat, jahr);
-    	int wochentag = kf.wochentag_im_jahr(monat, tagesnummer);
-    	int daysInMonth = kalender.getMonatslaenge(wochentag, monat);
+    	int tagesnummer = kf.tagesnummer( tag, monat, jahr);
+    	int wochentag = kf.wochentag_im_jahr( jahr, tagesnummer);
+    	int daysInMonth = kalender.getMonatslaenge( jahr, monat);
 
-    	monatInZeilen.add( getKopfzeileJahresplan(jahr, monat));
+    	monatInZeilen.add( getKopfzeileJahresplan( monat));
     	
     	for( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
     		
@@ -97,14 +98,14 @@ public class Jahresplaner {
 	    	
 	    	monatInZeilen.add(zeile.toString());
 	    	
-	    	wochentag = (wochentag + 1) % 7;	
+	    	wochentag = (wochentag + 1)  % 7;	
 	    	tagesnummer++;
     	}
     	
     	return monatInZeilen;
     }
     
-    /*
+    /**
      * public getKopfzeileJahresplan(int jahr, int monat)
      * ------------------------------------------------
      * @param int jahr
@@ -113,7 +114,7 @@ public class Jahresplaner {
      * Hilfsmethode fuer die Kopfzeile des Jahresplaner
      */
     
-    public String getKopfzeileJahresplan(int jahr, int monat) {
+    private String getKopfzeileJahresplan( int monat) {
     	  
     	StringBuffer kopfZeile = new StringBuffer();
     	
@@ -153,7 +154,7 @@ public class Jahresplaner {
      * @param bis (int) - 1= jan bis 12= dez
      * @return String - der Jahresplan
      */
-    public String gibJahresplan(int von, int bis) {
+    public String gibJahresplan( int von, int bis) {
     	
     	StringBuffer jahresPlan = new StringBuffer();
     	//StringBuffer fuer den Whitespace, der die Leerzeichen nach der Jahreszahl zum naechsten Monat dynamisch anlegen soll.
