@@ -55,16 +55,16 @@ public class Kalender implements IKalender {
 		 
 		 holidays.put( 1, new Event("Neujahr"));
 		 holidays.put( 6, new Event("Heilige 3 Koenige"));
-	   	 holidays.put( 31+14, new Event("Valentinstag"));
+	   	 holidays.put( 45, new Event("Valentinstag"));
 	   	 holidays.put( 121, new Event("1. Mai"));
 	   	 holidays.put( 227, new Event("Maria Himmelfahrt"));
 	   	 holidays.put( 276, new Event("Tag der dt. Einheit"));
-	     holidays.put(304, new Event("Reformationstag"));
-	   	 holidays.put(305, new Event("Allerheiligen"));     
-	   	 holidays.put( 358,new Event("Weihnachten"));
-	   	 holidays.put(359, new Event("1. Weihnachtstag"));
-	   	 holidays.put(360, new Event("2. Weihnachtstag"));
-	   	 holidays.put(365, new Event("Silvester"));
+	     holidays.put( 304, new Event("Reformationstag"));
+	   	 holidays.put( 305, new Event("Allerheiligen"));     
+	   	 holidays.put( 358,new Event("Heiligabend"));
+	   	 holidays.put( 359, new Event("1. Weihnachtstag"));
+	   	 holidays.put( 360, new Event("2. Weihnachtstag"));
+	   	 holidays.put( 365, new Event("Silvester"));
 	 }
 	 
 	 /**
@@ -136,8 +136,14 @@ public class Kalender implements IKalender {
 			 }
 			 tagesnummer--;
 		 }
-		 // fuer den Buss- und Bettag
 		 int tagesnummerHeiligAbend = calFuncs.tagesnummer( 24, 12, year);
+		 
+		 // im Falle einer HashMap Collision von 4. Advent und HeiligAbend, wird Element hierfuer ueberschrieben und gibt beide Feiertage aus
+		 if( advent4 == tagesnummerHeiligAbend) {
+			 holidaysforcurrent.put( tagesnummerHeiligAbend, new Event("Heiligabend / 4. Adventssonntag"));
+		 }
+		 
+		 // fuer den Buss- und Bettag
 		 tagesnummer = calFuncs.tagesnummer( 1, 11, year);
 		 // ?: int weekdayBettag = calFuncs.wochentag_im_jahr( year, tagesnummer); 
 		 if( tagesnummerHeiligAbend == advent4){
