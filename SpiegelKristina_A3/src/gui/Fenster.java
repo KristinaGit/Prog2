@@ -6,14 +6,18 @@ import javax.swing.*;
 
 import java.util.ArrayList;
 
+import controller.ActionAdapterCBCalFormat;
+
 public class Fenster {
 
 	JFrame frame;
 	Container pane;
 	
+	ActionAdapterCBCalFormat aaCheckBoxCalFormat;
+	
 	
 	public Fenster() {
-	
+		
 		frame = new JFrame("Kalender");
 		frame.setResizable( false);
 		
@@ -23,6 +27,8 @@ public class Fenster {
 	    if (!( pane.getLayout() instanceof BorderLayout)) {
 	    	System.out.println("Error: frame does not use BorderLayout");
 	    }
+	    
+	    aaCheckBoxCalFormat = new ActionAdapterCBCalFormat();
 	    
 	    createCenter();
 	    createLeft();
@@ -53,6 +59,7 @@ public class Fenster {
 	private void createLeft() {
 		
 	    JPanel leftPanel = new JPanel( new GridBagLayout());
+	    leftPanel.setPreferredSize(new Dimension(300, 750));
 	    pane.add( leftPanel, BorderLayout.LINE_START);
 	    GridBagConstraints leftGridBagC = new GridBagConstraints();
 	    leftGridBagC.anchor = GridBagConstraints.WEST;
@@ -98,23 +105,27 @@ public class Fenster {
 	    leftGridBagC.gridx = 2;
 	    leftPanel.add( leftComboBoxJahre, leftGridBagC);
 	    
-	//    ImageIcon leftPicture;
-	//    java.net.URL = getResource("/Users/lessig/Desktop/Kristina/prog2/SpiegelKristina_A3/images/monate/Januar.png");
-	//    if (imgURL != null) {
-	//    	leftPicture = new ImageIcon( imgURL);
-	//    	JLabel leftLabelPicture = new JLabel("", leftPicture, JLabel.CENTER);
-	//    	leftPanel.add(leftLabelPicture);
-	//    }
+	    ImageIcon leftPicture = createImageIcon( "images/Juli.jpg");
+	    if( leftPicture != null) {
+	    	leftPicture.setImage( leftPicture.getImage().getScaledInstance( 290, 193, Image.SCALE_DEFAULT));
+	    	JLabel leftLabelPicture = new JLabel("", leftPicture, JLabel.CENTER);
+	    	leftGridBagC.gridy = 5;
+		    leftGridBagC.gridx = 1;
+		    leftGridBagC.gridwidth = 2;
+	    	leftPanel.add(leftLabelPicture, leftGridBagC);
+	    	leftGridBagC.gridwidth = 1;
+	    }
 	    
 	    JLabel leftText4 = new JLabel( "Wochenbeginn mit So / Mo:");
-	    leftGridBagC.gridy = 5;
+	    leftGridBagC.gridy = 6;
 	    leftGridBagC.gridx = 1;
 	    leftPanel.add( leftText4, leftGridBagC);
 	    
 	    JCheckBox leftCheckBoxBeginn = new JCheckBox( "Format wechseln?");
 	    leftCheckBoxBeginn.setSelected( false);
-	    leftGridBagC.gridy = 6;
+	    leftGridBagC.gridy = 7;
 	    leftGridBagC.gridx = 1;
+	    leftCheckBoxBeginn.addActionListener( aaCheckBoxCalFormat);
 	    leftPanel.add( leftCheckBoxBeginn, leftGridBagC);
 	}    
 	    
@@ -228,6 +239,18 @@ public class Fenster {
 	    mnInfo.add(mntmHelp);
     
     }
+
+
+    // from https://docs.oracle.com/javase/tutorial/uiswing/components/icon.html
+    ImageIcon createImageIcon( String path) {
+    	java.net.URL imgURL = getClass().getResource(path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL);
+		} else {
+			System.err.println("Couldn't find file: " + path);
+			return null;
+		}
+	}
     
 }
 
