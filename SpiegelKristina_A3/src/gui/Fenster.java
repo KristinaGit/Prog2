@@ -1,12 +1,12 @@
 package gui;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 import java.util.ArrayList;
 
 import controller.ActionAdapterCBCalFormat;
+import controller.ActionAdapterRBMonatsblatt;
 
 public class Fenster {
 
@@ -15,8 +15,8 @@ public class Fenster {
 	
 	private JTextPane centerTextPane;
 	
-	ActionAdapterCBCalFormat aaCheckBoxCalFormat;
-	
+	ActionAdapterCBCalFormat aaCBCalFormat;
+	ActionAdapterRBMonatsblatt aaRBMonatsblatt;
 	
 	public Fenster() {
 		
@@ -30,8 +30,9 @@ public class Fenster {
 	    	System.out.println("Error: frame does not use BorderLayout");
 	    }
 	    
-	    aaCheckBoxCalFormat = new ActionAdapterCBCalFormat();
-	    
+	    aaCBCalFormat = new ActionAdapterCBCalFormat();
+	    aaRBMonatsblatt = new ActionAdapterRBMonatsblatt( this);
+	    		
 	    createCenter();
 	    createLeft();
 	    createRight();
@@ -60,6 +61,8 @@ public class Fenster {
 		paneScrollPane.setMinimumSize(new Dimension(500, 750));
 		
 		centerTextPane.setText( "Monatsblatt");
+		
+		centerTextPane.setForeground( Color.red);
 		
 		pane.add( paneScrollPane, BorderLayout.CENTER);
 	}
@@ -134,7 +137,7 @@ public class Fenster {
 	    leftCheckBoxBeginn.setSelected( false);
 	    leftGridBagC.gridy = 7;
 	    leftGridBagC.gridx = 1;
-	    leftCheckBoxBeginn.addActionListener( aaCheckBoxCalFormat);
+	    leftCheckBoxBeginn.addActionListener( aaCBCalFormat);
 	    leftPanel.add( leftCheckBoxBeginn, leftGridBagC);
 	}    
 	    
@@ -159,6 +162,7 @@ public class Fenster {
 	
 	    JRadioButton rightSecondButton = new JRadioButton( "Monatsblatt");
 	    rightSecondButton.setActionCommand( "Monatsblatt");
+	    rightSecondButton.addActionListener( aaRBMonatsblatt);
 	
 	    JRadioButton rightThirdButton = new JRadioButton( "Jahreskalender mit Feiertagen");
 	    rightThirdButton.setActionCommand( "Jahreskalender mit Feiertagen");

@@ -6,11 +6,11 @@ import kalender.Kalender;
 
 
 public class ActionAdapterCBCalFormat implements ActionListener {
-
-	Kalender kalender = new Kalender();
+	
 	
 	public void actionPerformed( ActionEvent event) {
-		
+
+		Kalender kalender = Kalender.getInstance();		
 		kalender.toggleFormatSelection();
 		
 		System.out.println( "Box clicked.");

@@ -14,9 +14,10 @@ public class Jahresplaner {
     
     boolean mitFeiertagen = true;
     
-    Kalender kalender = new Kalender();
+    Kalender kalender;
     
     public Jahresplaner(int jahr) {
+    	kalender = Kalender.getInstance();
     	this.jahr = jahr;
     	kalender.generateHolidaysForCurrentYear( jahr);
     }

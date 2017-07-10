@@ -3,12 +3,16 @@ import java.io.*;
 
 public class Ausgaben  {	
 	
-	Kalender kalender = new Kalender();
+	Kalender kalender;
 	Ausgaben ausgabe; 
 	Eingaben eingabe;
 	int calFormatSelection = 0; 
 	int modus = 1;
 
+	public Ausgaben() {
+		kalender = Kalender.getInstance();
+	}
+	
 	/**
 	 * printToSys()
 	 * -------------------------------------------------------------

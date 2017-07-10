@@ -16,6 +16,18 @@ import java.util.Map;
 
 
 public class Kalender implements IKalender {
+	
+	private static Kalender instance = null;
+	
+	public static Kalender getInstance() {
+		
+		if( null == instance) {
+			instance = new Kalender();
+		}
+		
+		return instance;
+	}
+	
 	/*
 	 * Deklarierung der Membervariablen, mit denen die Nutzereingabe und die Ausgabe behandelt wird
 	 */
@@ -80,10 +92,14 @@ public class Kalender implements IKalender {
 		}
 	 }
 	 	
+	 public void setModus( int m) {
+		 modus = m;
+	 }
+	 
 	 /*
 	  * Default-Konstruktor (mit Klassennamen ohne Argumente), um sicher zu stellen, dass feste Feiertage genau(!) 1x initialisiert werden
 	  */
-	 public Kalender() { 
+	 private Kalender() { 
 		 generateGeneralHolidays();
 	 }
 	 
@@ -217,8 +233,6 @@ public class Kalender implements IKalender {
 			 tagesnummer++;
 		 }	
 	 }	
-	 
-	 
 	 
 	 /**
 	  * StringBuffer formatMonth

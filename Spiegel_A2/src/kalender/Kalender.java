@@ -594,7 +594,7 @@ public class Kalender implements IKalender {
 		while( false == programmEnde) {
 		
 			ausgabe.printMainTextMenu();
-
+			
 			int inputMain = eingabe.readInputInt( "Bitte waehlen Sie ihre gewuenschte Option:", 
 												  "Ungueltige Eingabe. Bitte geben Sie eine gueltige Zahl ein.",
 												  0, 6);
