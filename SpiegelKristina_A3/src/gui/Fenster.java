@@ -13,6 +13,8 @@ public class Fenster {
 	JFrame frame;
 	Container pane;
 	
+	private JTextPane centerTextPane;
+	
 	ActionAdapterCBCalFormat aaCheckBoxCalFormat;
 	
 	
@@ -39,18 +41,25 @@ public class Fenster {
 	    frame.pack();
 	    frame.setVisible(true);
 	}
+	
+	///////////////////////////////////////////////////////////////////////////////////
+	public void setCenterTextPane( String text) {
+		centerTextPane.setText( text);
+	}
     
 	///////////////////////////////////////////////////////////////////////////////////
 	private void createCenter() {
 		
 		// center 
 		
-		JTextPane textPane = new JTextPane();
-		JScrollPane paneScrollPane = new JScrollPane(textPane);
+		centerTextPane = new JTextPane();
+		JScrollPane paneScrollPane = new JScrollPane(centerTextPane);
 		paneScrollPane.setVerticalScrollBarPolicy(
 		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		paneScrollPane.setPreferredSize(new Dimension(500, 750));
 		paneScrollPane.setMinimumSize(new Dimension(500, 750));
+		
+		centerTextPane.setText( "Monatsblatt");
 		
 		pane.add( paneScrollPane, BorderLayout.CENTER);
 	}
