@@ -9,6 +9,7 @@ import controller.ActionAdapterCBCalFormat;
 import controller.ActionAdapterRBMonatsblatt;
 import controller.ActionAdapterRBJahreskalender;
 import controller.ActionAdapterRBMonatmitFeiertagen;
+import controller.ActionAdapterKalenderjahr;
 
 public class Fenster {
 
@@ -21,6 +22,7 @@ public class Fenster {
 	ActionAdapterRBMonatsblatt aaRBMonatsblatt;
 	ActionAdapterRBJahreskalender aaRBJahreskalender;
 	ActionAdapterRBMonatmitFeiertagen aaRBMonatmitFeiertagen;
+	ActionAdapterKalenderjahr aaKalenderjahr;
 	
 	public JComboBox<Integer> leftComboBoxJahre;
 	public JComboBox<String> leftComboBoxMonate;
@@ -41,6 +43,7 @@ public class Fenster {
 	    aaRBMonatsblatt = new ActionAdapterRBMonatsblatt( this);
 	    aaRBJahreskalender = new ActionAdapterRBJahreskalender( this);
 	    aaRBMonatmitFeiertagen = new ActionAdapterRBMonatmitFeiertagen(this);
+	    aaKalenderjahr = new ActionAdapterKalenderjahr( this);
 	    		
 	    createCenter();
 	    createLeft();
@@ -168,6 +171,8 @@ public class Fenster {
 	    JRadioButton rightFirstButton = new JRadioButton( "Kalender fuer das ganze Jahr");
 	    rightFirstButton.setActionCommand( "Kalender fuer das ganze Jahr");
 	    rightFirstButton.setSelected(true);
+	    rightFirstButton.addActionListener( aaKalenderjahr);
+	    
 	
 	    JRadioButton rightSecondButton = new JRadioButton( "Monatsblatt");
 	    rightSecondButton.setActionCommand( "Monatsblatt");
