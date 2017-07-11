@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import controller.ActionAdapterCBCalFormat;
 import controller.ActionAdapterRBMonatsblatt;
+import controller.ActionAdapterRBJahreskalender;
+import controller.ActionAdapterRBMonatmitFeiertagen;
 
 public class Fenster {
 
@@ -17,6 +19,11 @@ public class Fenster {
 	
 	ActionAdapterCBCalFormat aaCBCalFormat;
 	ActionAdapterRBMonatsblatt aaRBMonatsblatt;
+	ActionAdapterRBJahreskalender aaRBJahreskalender;
+	ActionAdapterRBMonatmitFeiertagen aaRBMonatmitFeiertagen;
+	
+	public JComboBox<Integer> leftComboBoxJahre;
+	public JComboBox<String> leftComboBoxMonate;
 	
 	public Fenster() {
 		
@@ -32,6 +39,8 @@ public class Fenster {
 	    
 	    aaCBCalFormat = new ActionAdapterCBCalFormat();
 	    aaRBMonatsblatt = new ActionAdapterRBMonatsblatt( this);
+	    aaRBJahreskalender = new ActionAdapterRBJahreskalender( this);
+	    aaRBMonatmitFeiertagen = new ActionAdapterRBMonatmitFeiertagen(this);
 	    		
 	    createCenter();
 	    createLeft();
@@ -93,7 +102,7 @@ public class Fenster {
 	    
 	    String[] monateStrings = { "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September",
 	    						   "Oktober", "November", "Dezember"};
-	    JComboBox leftComboBoxMonate = new JComboBox( monateStrings);
+	    leftComboBoxMonate = new JComboBox<String>( monateStrings);
 	    leftComboBoxMonate.setSelectedIndex(6);
 	    leftGridBagC.gridy = 4;
 	    leftGridBagC.gridx = 1;
@@ -107,11 +116,11 @@ public class Fenster {
 	    leftPanel.add( leftText3, leftGridBagC);
 	    leftGridBagC.insets = new Insets( 0,0,0,0);
 	    
-	    ArrayList<String> jahreStrings = new ArrayList();
+	    ArrayList<Integer> jahreList = new ArrayList<Integer>();
 	    for( Integer i = 1900; i < 2100; ++i) {
-	    	jahreStrings.add( i.toString());
+	    	jahreList.add( i);
 	    }
-	    JComboBox leftComboBoxJahre = new JComboBox( jahreStrings.toArray());
+	    leftComboBoxJahre = new JComboBox( jahreList.toArray());
 	    leftComboBoxJahre.setSelectedIndex( 117);
 	    leftGridBagC.gridy = 4;
 	    leftGridBagC.gridx = 2;
@@ -156,8 +165,8 @@ public class Fenster {
 	    leftGridBagC.gridx = 1;
 	    rightPanel.add( rightText, leftGridBagC);
 	    
-	    JRadioButton rightFirstButton = new JRadioButton( "Kalender für das ganze Jahr");
-	    rightFirstButton.setActionCommand( "Kalender für das ganze Jahr");
+	    JRadioButton rightFirstButton = new JRadioButton( "Kalender fuer das ganze Jahr");
+	    rightFirstButton.setActionCommand( "Kalender fuer das ganze Jahr");
 	    rightFirstButton.setSelected(true);
 	
 	    JRadioButton rightSecondButton = new JRadioButton( "Monatsblatt");
@@ -166,9 +175,11 @@ public class Fenster {
 	
 	    JRadioButton rightThirdButton = new JRadioButton( "Jahreskalender mit Feiertagen");
 	    rightThirdButton.setActionCommand( "Jahreskalender mit Feiertagen");
+	    rightThirdButton.addActionListener( aaRBJahreskalender );
 	
 	    JRadioButton rightFourthButton = new JRadioButton( "Monatsblatt mit Feiertagen");
 	    rightFourthButton.setActionCommand( "Monatsblatt mit Feiertagen");
+	    rightFourthButton.addActionListener( aaRBMonatmitFeiertagen );
 	
 	 
 	    //Group the radio buttons.

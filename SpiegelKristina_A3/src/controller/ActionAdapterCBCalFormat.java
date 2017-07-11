@@ -7,7 +7,6 @@ import kalender.Kalender;
 
 public class ActionAdapterCBCalFormat implements ActionListener {
 	
-	
 	public void actionPerformed( ActionEvent event) {
 
 		Kalender kalender = Kalender.getInstance();		

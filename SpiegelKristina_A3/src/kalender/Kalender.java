@@ -17,8 +17,10 @@ import java.util.Map;
 
 public class Kalender implements IKalender {
 	
+	//Singleton Instanzvariable
 	private static Kalender instance = null;
 	
+	//Methode fuer Singleton
 	public static Kalender getInstance() {
 		
 		if( null == instance) {
@@ -97,7 +99,7 @@ public class Kalender implements IKalender {
 	 }
 	 
 	 /*
-	  * Default-Konstruktor (mit Klassennamen ohne Argumente), um sicher zu stellen, dass feste Feiertage genau(!) 1x initialisiert werden
+	  * privat-Konstruktor fuer Singleton
 	  */
 	 private Kalender() { 
 		 generateGeneralHolidays();
@@ -109,7 +111,7 @@ public class Kalender implements IKalender {
 	  * Hilfsmethode zum Befuellen der HashMap mit festen Feiertagen
 	  */
 	 
-	 void generateGeneralHolidays() {
+	 public void generateGeneralHolidays() {
 		 
 		 holidays.put( 1, new Event("Neujahr"));
 		 holidays.put( 6, new Event("Heilige 3 Koenige"));
@@ -132,7 +134,7 @@ public class Kalender implements IKalender {
 	  * -----------------------------------------------------------------------------
 	  * Hilfsmethode zum Befuellen der HashMap mit Osterabhaengigen Feiertagen und denen, die durch das Schaltjahr beeinflusst werden
 	  */
-	 void generateHolidaysForCurrentYear( int year) {
+	 public void generateHolidaysForCurrentYear( int year) {
 	 
 		 //shallowcopy von holidays
 		 boolean pruefSchaltjahr= calFuncs.istSchaltjahr(year);
