@@ -407,8 +407,7 @@ public class Kalender implements IKalender {
 	}
 	 
 	public String getMonatsblatt(int jahr, int monat) {
-		
-		
+			
 		StringBuffer monatsBlatt = new StringBuffer();
 		
 		// Konstruktoraufruf fuer KalenderFunktion
@@ -519,6 +518,116 @@ public class Kalender implements IKalender {
 		return monatsBlatt.toString();
 	}
 
+	public String getMonatsblattWithFormatting(int jahr, int monat) {
+		
+		StringBuffer monatsBlatt = new StringBuffer();
+		
+		// Konstruktoraufruf fuer KalenderFunktion
+		
+		 //2. Funktionsaufruf calFuncs.tagesnummer gibt int fuer Tagesnummer zurueck,
+		 //da bei n Fehlermeldung kam und man spart einen separaten Funktionsaufruf
+		 
+		int tagesnummer = calFuncs.tagesnummer( 1, monat, jahr);
+		int weekday = calFuncs.wochentag_im_jahr(jahr, tagesnummer);  
+		boolean pruefSchaltjahr = calFuncs.istSchaltjahr(jahr);
+		
+		String abstand = "     "; // 5 Leerzeichen		
+		
+		// Selection europaeisches oder amerikanisches Kalenderformat
+		 
+		if(calFormatSelection == 0){
+			if( 0 == weekday) {
+				weekday = 6; 
+			}
+			else {
+				weekday--;
+			}
+		}
+		for(int i = 0; i < weekday; i++){
+			monatsBlatt.append(abstand);
+		}
+		weekday++;
+		
+		int daysInMonth = getMonatslaenge( jahr, monat);
+
+		//fuer die Ausgabe der Feiertage im jeweiligen Monat
+		ArrayList<String> holidaysinmonth = new ArrayList<String>();
+		
+		for ( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
+			
+			if (modus == 1){
+				
+				Event cday = holidaysforcurrent.get(tagesnummer); //holt sich aus HashMap das Element zur Tagesnummer; cday = currentday
+				
+				boolean pruefFeiertag = true; 
+				if( null == cday) {
+					pruefFeiertag = false;
+				}
+				else {
+					StringBuffer line = new StringBuffer();
+					if( daynumber < 10) {
+						line.append( "0");
+					}
+					line.append( daynumber);
+					line.append( ". : ");
+					line.append( cday.name);
+					holidaysinmonth.add( line.toString()); 
+				}
+				
+				if( pruefFeiertag) { 
+					
+					if (daynumber <= 9) {
+						monatsBlatt.append("0");
+						monatsBlatt.append(daynumber);
+						monatsBlatt.append("*");
+					}
+					else{	
+						monatsBlatt.append(daynumber);
+						monatsBlatt.append("*");
+					}
+					monatsBlatt.append("  ");
+					
+				// wenn es kein Feiertag ist, soll kein * hinzugefuegt werden!
+				}else {
+					if (daynumber <= 9) {
+						monatsBlatt.append("0");
+					}
+					monatsBlatt.append(daynumber);
+					monatsBlatt.append("   ");
+				}
+			}
+			// modus == 0
+			else {
+				if (daynumber <= 9) {
+					monatsBlatt.append("0");
+				}
+				monatsBlatt.append(daynumber);
+				monatsBlatt.append("   ");
+			}
+
+			if (weekday % 7 == 0) {
+				monatsBlatt.append("\n");
+			}
+			/*
+			 *weekday muss synchron mit daynumber hochzaehlen, damit die Zeilenumbrueche stimmen
+			 */
+			weekday++; 
+			tagesnummer++;
+		}
+		
+		monatsBlatt.append("\n");
+
+		if(modus == 1){
+			monatsBlatt.append("\n" + "Im " + getMonatsname( monat) + " gibt es folgende Feiertage: " + "\n");		
+			for( int i = 0; i < holidaysinmonth.size(); i++) {
+				monatsBlatt.append( holidaysinmonth.get(i));
+				monatsBlatt.append("\n");
+			} 
+			monatsBlatt.append("\n");
+		}
+		
+		return monatsBlatt.toString();
+	}
 	
 	public String getKopfzeileMonatsblatt(int jahr, int monat) {
 	

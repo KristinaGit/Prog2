@@ -22,14 +22,13 @@ public class ActionAdapterRBMonatmitFeiertagen implements ActionListener {
 		
 		int year = 1900 + fenster.leftComboBoxJahre.getSelectedIndex();
 		int month = 1 + fenster.leftComboBoxMonate.getSelectedIndex();
+		kalender.generateHolidaysForCurrentYear( year );
 		
-		StringBuffer output = new StringBuffer();
 		String headlineFormat = kalender.getKopfzeileMonatsblatt( year, month);
-		output.append( headlineFormat);
-		String monthStr = kalender.getMonatsblatt( year, month);
-		output.append(monthStr);
+		fenster.setCenterTextPaneFormatted( headlineFormat, true, false);
 		
-		fenster.setCenterTextPane( output.toString());
+		String monthStr = kalender.getMonatsblatt( year, month);
+		fenster.setCenterTextPaneFormatted( monthStr, true, true);
 	}
 		
 		

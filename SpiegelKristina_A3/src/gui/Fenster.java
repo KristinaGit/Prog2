@@ -2,6 +2,10 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.*;
+
+import java.util.Observer;
+import java.util.Observable;
 
 import java.util.ArrayList;
 
@@ -11,10 +15,24 @@ import controller.ActionAdapterRBJahreskalender;
 import controller.ActionAdapterRBMonatmitFeiertagen;
 import controller.ActionAdapterKalenderjahr;
 
+
 public class Fenster {
 
 	JFrame frame;
 	Container pane;
+	
+	//Membervariable fuer Singleton
+	private static Fenster instance = null;
+	
+	//Methode um Fenster zum Singleton zu machen
+	public static Fenster getInstance(){
+		
+		if( instance == null){
+			instance = new Fenster();
+		}
+		return instance;
+	}
+	
 	
 	private JTextPane centerTextPane;
 	
@@ -24,10 +42,31 @@ public class Fenster {
 	ActionAdapterRBMonatmitFeiertagen aaRBMonatmitFeiertagen;
 	ActionAdapterKalenderjahr aaKalenderjahr;
 	
+	StyledDocument doc;
+	
 	public JComboBox<Integer> leftComboBoxJahre;
 	public JComboBox<String> leftComboBoxMonate;
 	
-	public Fenster() {
+	// Observer for text pane
+	class ObserverCenterTextPane implements Observer {
+		
+		Fenster fensterLocal;
+		
+		ObserverCenterTextPane( Fenster f) {
+			fensterLocal = f;
+		}
+		
+		public void update( Observable o, Object arg) {
+			fensterLocal.centerTextPane.setText( "Test");
+		}
+	}
+	
+	ObserverCenterTextPane observerTextPane;
+ 	
+	
+	// Constructor, Singleton
+	private Fenster() {
+		
 		
 		frame = new JFrame("Kalender");
 		frame.setResizable( false);
@@ -45,6 +84,9 @@ public class Fenster {
 	    aaRBMonatmitFeiertagen = new ActionAdapterRBMonatmitFeiertagen(this);
 	    aaKalenderjahr = new ActionAdapterKalenderjahr( this);
 	    		
+	    observerTextPane = new ObserverCenterTextPane( this);
+	    aaRBMonatsblatt.addObserver( observerTextPane);
+	    
 	    createCenter();
 	    createLeft();
 	    createRight();
@@ -55,9 +97,64 @@ public class Fenster {
 	    frame.setVisible(true);
 	}
 	
+	
 	///////////////////////////////////////////////////////////////////////////////////
 	public void setCenterTextPane( String text) {
 		centerTextPane.setText( text);
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////
+	public void testCenterTextPane( ) {
+		// green: in green
+		// House: italic
+		String[] text = {"My", " green", " House."};
+		
+		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+		
+		Style regularGreen = doc.addStyle( "regularGreen", defaultStyle);
+		StyleConstants.setForeground( regularGreen, Color.GREEN);
+		
+		try{
+			doc.remove( 0, doc.getLength());
+			
+			doc.insertString( 0, text[0], doc.getStyle("default"));
+			doc.insertString( doc.getLength(), text[1], doc.getStyle("regularGreen"));
+			doc.insertString( doc.getLength(), text[2], doc.getStyle("default"));
+		}
+		catch( Exception ex){
+			
+		}
+		
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////
+	public void setCenterTextPaneFormatted( String text, boolean highlighted, boolean append) {
+		
+		int offset = 0;
+		if( append) {
+			offset = doc.getLength();
+		}
+		else {
+			try {
+				doc.remove( 0, doc.getLength());
+			}
+			catch (BadLocationException ex) {
+					// handle exception
+			}
+		}
+		
+		try {
+			if( ! highlighted) {
+				doc.insertString( offset, text, doc.getStyle( "regular"));
+			}
+			else {
+				doc.insertString( offset, text, doc.getStyle( "highlighted"));
+			}
+		}
+		catch (BadLocationException ex) {
+			// handle exception
+		}
+		
 	}
     
 	///////////////////////////////////////////////////////////////////////////////////
@@ -72,11 +169,28 @@ public class Fenster {
 		paneScrollPane.setPreferredSize(new Dimension(500, 750));
 		paneScrollPane.setMinimumSize(new Dimension(500, 750));
 		
-		centerTextPane.setText( "Monatsblatt");
+		doc = centerTextPane.getStyledDocument();
 		
-		centerTextPane.setForeground( Color.red);
+		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+		
+		Style regular = doc.addStyle( "regular", defaultStyle);
+		StyleConstants.setFontFamily( regular, "SansSerif");
+		
+		Style highlighted = doc.addStyle( "highlighted", defaultStyle);
+		StyleConstants.setFontFamily( highlighted, "SansSerif");
+		StyleConstants.setForeground( highlighted, Color.RED);
+		
+		String text = "Bitte treffen Sie eine Auswahl.";
+		try {
+			doc.insertString( 0, text, doc.getStyle( "regular"));
+		}
+		catch (BadLocationException ex) {
+			// handle exception
+		}
 		
 		pane.add( paneScrollPane, BorderLayout.CENTER);
+		
+		testCenterTextPane();
 	}
 	
     ///////////////////////////////////////////////////////////////////////////////////
