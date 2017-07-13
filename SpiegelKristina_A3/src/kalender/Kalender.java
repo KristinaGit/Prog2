@@ -518,9 +518,20 @@ public class Kalender implements IKalender {
 		return monatsBlatt.toString();
 	}
 
-	public String getMonatsblattWithFormatting(int jahr, int monat) {
+	public class StreamTokenH {
 		
-		StringBuffer monatsBlatt = new StringBuffer();
+		StreamTokenH( boolean h, String t) {
+			highlight = h;
+			token = t;
+		}
+		
+		public boolean highlight;
+		public String token;
+	}
+	
+	public ArrayList<StreamTokenH> getMonatsblattWithFormatting(int jahr, int monat) {
+		
+		ArrayList<StreamTokenH> monatsBlatt = new ArrayList<StreamTokenH>();
 		
 		// Konstruktoraufruf fuer KalenderFunktion
 		
@@ -544,7 +555,7 @@ public class Kalender implements IKalender {
 			}
 		}
 		for(int i = 0; i < weekday; i++){
-			monatsBlatt.append(abstand);
+			monatsBlatt.add( new StreamTokenH( false, abstand));
 		}
 		weekday++;
 		
@@ -553,7 +564,7 @@ public class Kalender implements IKalender {
 		//fuer die Ausgabe der Feiertage im jeweiligen Monat
 		ArrayList<String> holidaysinmonth = new ArrayList<String>();
 		
-		for ( int daynumber = 1; daynumber <= daysInMonth; daynumber++) {
+		for ( Integer daynumber = 1; daynumber <= daysInMonth; daynumber++) {
 			
 			if (modus == 1){
 				
@@ -577,36 +588,36 @@ public class Kalender implements IKalender {
 				if( pruefFeiertag) { 
 					
 					if (daynumber <= 9) {
-						monatsBlatt.append("0");
-						monatsBlatt.append(daynumber);
-						monatsBlatt.append("*");
+						monatsBlatt.add( new StreamTokenH( true, "0"));
+						monatsBlatt.add( new StreamTokenH( true, daynumber.toString()));
+						monatsBlatt.add( new StreamTokenH( true, "*"));
 					}
 					else{	
-						monatsBlatt.append(daynumber);
-						monatsBlatt.append("*");
+						monatsBlatt.add( new StreamTokenH( true, daynumber.toString()));
+						monatsBlatt.add( new StreamTokenH( true, "*"));
 					}
-					monatsBlatt.append("  ");
+					monatsBlatt.add( new StreamTokenH( true, "  "));
 					
 				// wenn es kein Feiertag ist, soll kein * hinzugefuegt werden!
 				}else {
 					if (daynumber <= 9) {
-						monatsBlatt.append("0");
+						monatsBlatt.add( new StreamTokenH( false, "0"));
 					}
-					monatsBlatt.append(daynumber);
-					monatsBlatt.append("   ");
+					monatsBlatt.add( new StreamTokenH( false, daynumber.toString()));
+					monatsBlatt.add( new StreamTokenH( false, "   "));
 				}
 			}
 			// modus == 0
 			else {
 				if (daynumber <= 9) {
-					monatsBlatt.append("0");
+					monatsBlatt.add( new StreamTokenH( false, "0"));
 				}
-				monatsBlatt.append(daynumber);
-				monatsBlatt.append("   ");
+				monatsBlatt.add( new StreamTokenH( false, daynumber.toString()));
+				monatsBlatt.add( new StreamTokenH( false, "   "));
 			}
 
 			if (weekday % 7 == 0) {
-				monatsBlatt.append("\n");
+				monatsBlatt.add( new StreamTokenH( false, "\n"));
 			}
 			/*
 			 *weekday muss synchron mit daynumber hochzaehlen, damit die Zeilenumbrueche stimmen
@@ -615,18 +626,18 @@ public class Kalender implements IKalender {
 			tagesnummer++;
 		}
 		
-		monatsBlatt.append("\n");
+		monatsBlatt.add( new StreamTokenH( false, "\n"));
 
 		if(modus == 1){
-			monatsBlatt.append("\n" + "Im " + getMonatsname( monat) + " gibt es folgende Feiertage: " + "\n");		
+			monatsBlatt.add( new StreamTokenH( true, "\n" + "Im " + getMonatsname( monat) + " gibt es folgende Feiertage: " + "\n"));		
 			for( int i = 0; i < holidaysinmonth.size(); i++) {
-				monatsBlatt.append( holidaysinmonth.get(i));
-				monatsBlatt.append("\n");
+				monatsBlatt.add( new StreamTokenH( true, holidaysinmonth.get(i)));
+				monatsBlatt.add( new StreamTokenH( true, "\n"));
 			} 
-			monatsBlatt.append("\n");
+			monatsBlatt.add( new StreamTokenH( true, "\n"));
 		}
 		
-		return monatsBlatt.toString();
+		return monatsBlatt;
 	}
 	
 	public String getKopfzeileMonatsblatt(int jahr, int monat) {

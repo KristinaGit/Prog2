@@ -2,8 +2,11 @@ package controller;
 
 import java.awt.event.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import gui.Fenster;
 import kalender.Kalender;
+import kalender.Kalender.StreamTokenH;
 
 public class ActionAdapterRBMonatmitFeiertagen implements ActionListener {
 	
@@ -27,10 +30,12 @@ public class ActionAdapterRBMonatmitFeiertagen implements ActionListener {
 		String headlineFormat = kalender.getKopfzeileMonatsblatt( year, month);
 		fenster.setCenterTextPaneFormatted( headlineFormat, true, false);
 		
-		String monthStr = kalender.getMonatsblatt( year, month);
-		fenster.setCenterTextPaneFormatted( monthStr, true, true);
-	}
+		ArrayList<Kalender.StreamTokenH> monatsBlatt = kalender.getMonatsblattWithFormatting( year, month);
 		
+		for( int i = 0; i < monatsBlatt.size(); ++i) {
+			fenster.setCenterTextPaneFormatted( monatsBlatt.get(i).token, monatsBlatt.get(i).highlight, true);
+		}
+	}
 		
 
 }
