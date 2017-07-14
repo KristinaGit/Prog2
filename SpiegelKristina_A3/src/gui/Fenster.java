@@ -658,7 +658,7 @@ public class Fenster {
 	        }
 	        finally{
 	            try {                  
-	                out.close(); // Stream schließen
+	                out.close(); 
 	            } catch (IOException e) {
 	                e.printStackTrace();
 	            }
