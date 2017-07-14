@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.*;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -583,7 +585,7 @@ public class Fenster {
     		File file = fileChooser.getSelectedFile();
     		String filename = file.getAbsolutePath();
     		
-    		if( filename.endsWith(".rtf") || filename.endsWith(".txt") || filename.endsWith(".csv") ){
+    		if( filename.endsWith(".rtf")){
     			
     			RTFEditorKit kit = new RTFEditorKit( );
     			
@@ -596,6 +598,26 @@ public class Fenster {
     			}
     			
 	        }
+    		else if( filename.endsWith(".txt") || filename.endsWith(".csv")) {
+    			
+    			try {
+    				FileReader in = new FileReader(filename);
+    			    BufferedReader br = new BufferedReader(in);
+
+    			    // clear center text pane
+    			    this.setCenterTextPaneFormatted( "", false, false);
+    			    
+    			    String line;
+    			    while( (line = br.readLine()) != null) {
+    			        this.setCenterTextPaneFormatted( line, false, true);
+    			        this.setCenterTextPaneFormatted( "\n", false, true);
+    			    }
+    			    in.close();
+    			}
+    			catch (Exception e) {
+    				System.err.println("Failed to read file.");
+        		}
+    		}
     		else {
     			JOptionPane.showMessageDialog(frame, "Ungueltiges Dateiformat.");
     		}
