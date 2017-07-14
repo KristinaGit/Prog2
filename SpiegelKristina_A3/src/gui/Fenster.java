@@ -703,9 +703,11 @@ public class Fenster {
     // TODO
     public void terminate() {
     	
-    	if( frameJahresplaner.isVisible()) {
-    		frameJahresplaner.setVisible(false);
-    		frameJahresplaner.dispose();
+    	if( null != frameJahresplaner) {
+	    	if( frameJahresplaner.isVisible()) {
+	    		frameJahresplaner.setVisible(false);
+	    		frameJahresplaner.dispose();
+	    	}
     	}
     	
     	frame.setVisible(false);
