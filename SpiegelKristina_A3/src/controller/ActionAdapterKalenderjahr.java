@@ -28,6 +28,7 @@ public class ActionAdapterKalenderjahr implements ActionListener{
 			wholeyear.append( headlineFormat);
 			String monthStr = kalender.getMonatsblatt( year, monat);
 			wholeyear.append(monthStr);
+			wholeyear.append( "\n");
 		}
 
 		fenster.setCenterTextPaneFormatted( wholeyear.toString(), false, false);
