@@ -38,8 +38,10 @@ import controller.ActionAdapterAuswahlMonat;
 
 public class Fenster {
 
-	JFrame frame;
-	Container pane;
+	JFrame frame = null;
+	Container pane = null;
+	
+	JFrame frameJahresplaner = null;
 	
 	String[] monateStrings = { "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September",
 			   "Oktober", "November", "Dezember"};
@@ -461,6 +463,11 @@ public class Fenster {
     	                    							 monateStrings,
     	                    							"2017");
 
+    	// user pressed cancel
+    	if( null == ret) {
+    		return -1;
+    	}
+    	
     	for( int m = 0; m < 12; ++m) {
     		if( monateStrings[m].equals( ret)) {
     			return m;
@@ -480,6 +487,11 @@ public class Fenster {
     	                    							 monateStrings,
     	                    							"2017");
 
+    	// user pressed cancel
+    	if( null == ret) {
+    		return -1;
+    	}
+    	
     	for( int m = 0; m < 12; ++m) {
     		if( monateStrings[m].equals( ret)) {
     			return m;
@@ -493,7 +505,15 @@ public class Fenster {
     // TODO
     public void showJahresplaner( String jahresplanerText) {
     	
-    	JFrame frameJahresplaner = new JFrame("Jahresplaner");
+    	// make sure we always have only one window
+    	if( null != frameJahresplaner) {
+    		if( frameJahresplaner.isVisible()) {
+    			frameJahresplaner.setVisible(false);
+    			frameJahresplaner.dispose();
+    		}
+    	}
+    	
+    	frameJahresplaner = new JFrame("Jahresplaner");
     	frameJahresplaner.setResizable( false);
 		
 	    Container paneJahresplaner = frameJahresplaner.getContentPane();
@@ -535,7 +555,15 @@ public class Fenster {
     // TODO
     public void saveJahresplaner() {
     	
-    	assert( jpdoc != null);
+    	if( null == frameJahresplaner) {
+    		System.err.println("Cannot save Jahresplaner. No window open.");
+    		return;
+    	}
+    	if( ! frameJahresplaner.isVisible()) {
+    		System.err.println("Cannot save Jahresplaner. No window open.");
+    		return;
+    	}
+        assert( jpdoc != null);
     	
     	JFileChooser fileChooser = new JFileChooser();
     	if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -674,6 +702,11 @@ public class Fenster {
     
     // TODO
     public void terminate() {
+    	
+    	if( frameJahresplaner.isVisible()) {
+    		frameJahresplaner.setVisible(false);
+    		frameJahresplaner.dispose();
+    	}
     	
     	frame.setVisible(false);
     	frame.dispose();

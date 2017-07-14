@@ -19,8 +19,21 @@ public class ActionAdapterMenuJahresplaner implements ActionListener  {
 			
 			// TODO: Error handling when return values are not in valid range (e.g. user pressed cancel)
 			int monatVon = f.showJahresplanerVon();
+			if( monatVon < 0) {
+				System.err.println("ActionAdapterMenuJahresplaner : monatVon has invalid value. Probably user pressed cancel");
+				return;
+			}
 			int monatBis = f.showJahresplanerBis();
+			if( monatBis < 0) {
+				System.err.println("ActionAdapterMenuJahresplaner : monatBis has invalid value. Probably user pressed cancel");
+				return;
+			}
 			
+			if( monatBis < monatVon) {
+				System.err.println("ActionAdapterMenuJahresplaner : invalid range");				
+				return;
+			}
+	
 			int year = 1900 + f.leftComboBoxJahre.getSelectedIndex();
 			Jahresplaner plan = new Jahresplaner( year); 
 			cal.setModus(1);
@@ -33,7 +46,6 @@ public class ActionAdapterMenuJahresplaner implements ActionListener  {
 		
 			if( f.jpdoc != null) {
 				// TODO
-				System.err.println("Jahresplaner::Show has to be called first.");
 				f.saveJahresplaner();
 			}
 		}
