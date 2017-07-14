@@ -1,25 +1,46 @@
 package gui;
 
 import java.awt.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.text.rtf.RTFEditorKit;
+import javax.swing.plaf.metal.*;
 
 import java.util.Observer;
 import java.util.Observable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import controller.ActionAdapterCBCalFormat;
 import controller.ActionAdapterRBMonatsblatt;
 import controller.ActionAdapterRBJahreskalender;
 import controller.ActionAdapterRBMonatmitFeiertagen;
 import controller.ActionAdapterKalenderjahr;
+import controller.ActionAdapterMenuAutorin;
+import controller.ActionAdapterMenuHilfe;
+import controller.ActionAdapterLookFeel;
+import controller.ActionAdapterMenuKalender;
+import controller.ActionAdapterMenuJahresplaner;
+import controller.ActionAdapterMenuDatei;
+import controller.ActionAdapterAuswahlMonat;
 
 
 public class Fenster {
 
 	JFrame frame;
 	Container pane;
+	
+	String[] monateStrings = { "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September",
+			   "Oktober", "November", "Dezember"};
 	
 	//Membervariable fuer Singleton
 	private static Fenster instance = null;
@@ -41,28 +62,38 @@ public class Fenster {
 	ActionAdapterRBJahreskalender aaRBJahreskalender;
 	ActionAdapterRBMonatmitFeiertagen aaRBMonatmitFeiertagen;
 	ActionAdapterKalenderjahr aaKalenderjahr;
+	ActionAdapterMenuAutorin aaMenuAutorin;
+	ActionAdapterMenuHilfe aaMenuHilfe;
+	ActionAdapterLookFeel aaLookFeel;
+	ActionAdapterMenuKalender aaMenuKalender;
+	ActionAdapterMenuJahresplaner aaMenuJahresplaner;
+	ActionAdapterMenuDatei aaMenuDatei;
+	ActionAdapterAuswahlMonat aaAuswahlMonat;
 	
-	StyledDocument doc;
+	public JMenuItem mntmMenuDateiOpen;
+	public JMenuItem mntmMenuDateiSave;
+	public JMenuItem mntmMenuDateiClose;
+	
+	public JMenuItem mntmJahresplanerShow;
+	public JMenuItem mntmJahresplanerSave;
+	
+	public JMenuItem mntmFeiertage;
+	public JMenuItem mntmFeiertageOhneSosa;
+	
+	public JMenuItem mntmWindows;
+	public JMenuItem mntmMetal;
+	public JMenuItem mntmMotif;
+	
+	StyledDocument doc = null;
+	public StyledDocument jpdoc = null;
 	
 	public JComboBox<Integer> leftComboBoxJahre;
 	public JComboBox<String> leftComboBoxMonate;
-	
-	// Observer for text pane
-	class ObserverCenterTextPane implements Observer {
-		
-		Fenster fensterLocal;
-		
-		ObserverCenterTextPane( Fenster f) {
-			fensterLocal = f;
-		}
-		
-		public void update( Observable o, Object arg) {
-			fensterLocal.centerTextPane.setText( "Test");
-		}
-	}
-	
-	ObserverCenterTextPane observerTextPane;
  	
+	ArrayList<ImageIcon> leftPictureImages;
+	ImageIcon leftPicture;
+	JLabel leftLabelPicture;
+	
 	
 	// Constructor, Singleton
 	private Fenster() {
@@ -83,9 +114,13 @@ public class Fenster {
 	    aaRBJahreskalender = new ActionAdapterRBJahreskalender( this);
 	    aaRBMonatmitFeiertagen = new ActionAdapterRBMonatmitFeiertagen(this);
 	    aaKalenderjahr = new ActionAdapterKalenderjahr( this);
-	    		
-	    observerTextPane = new ObserverCenterTextPane( this);
-	    aaRBMonatsblatt.addObserver( observerTextPane);
+	    aaMenuAutorin = new ActionAdapterMenuAutorin();
+	    aaMenuHilfe = new ActionAdapterMenuHilfe();
+	    aaLookFeel = new ActionAdapterLookFeel();
+	    aaMenuKalender = new ActionAdapterMenuKalender();
+	    aaMenuJahresplaner = new ActionAdapterMenuJahresplaner();
+	    aaMenuDatei = new ActionAdapterMenuDatei();
+	    aaAuswahlMonat = new ActionAdapterAuswahlMonat();
 	    
 	    createCenter();
 	    createLeft();
@@ -97,35 +132,6 @@ public class Fenster {
 	    frame.setVisible(true);
 	}
 	
-	
-	///////////////////////////////////////////////////////////////////////////////////
-	public void setCenterTextPane( String text) {
-		centerTextPane.setText( text);
-	}
-	
-	///////////////////////////////////////////////////////////////////////////////////
-	public void testCenterTextPane( ) {
-		// green: in green
-		// House: italic
-		String[] text = {"My", " green", " House."};
-		
-		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-		
-		Style regularGreen = doc.addStyle( "regularGreen", defaultStyle);
-		StyleConstants.setForeground( regularGreen, Color.GREEN);
-		
-		try{
-			doc.remove( 0, doc.getLength());
-			
-			doc.insertString( 0, text[0], doc.getStyle("default"));
-			doc.insertString( doc.getLength(), text[1], doc.getStyle("regularGreen"));
-			doc.insertString( doc.getLength(), text[2], doc.getStyle("default"));
-		}
-		catch( Exception ex){
-			
-		}
-		
-	}
 	
 	///////////////////////////////////////////////////////////////////////////////////
 	public void setCenterTextPaneFormatted( String text, boolean highlighted, boolean append) {
@@ -164,8 +170,6 @@ public class Fenster {
 		
 		centerTextPane = new JTextPane();
 		JScrollPane paneScrollPane = new JScrollPane(centerTextPane);
-		paneScrollPane.setVerticalScrollBarPolicy(
-		JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		paneScrollPane.setPreferredSize(new Dimension(500, 750));
 		paneScrollPane.setMinimumSize(new Dimension(500, 750));
 		
@@ -174,10 +178,10 @@ public class Fenster {
 		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 		
 		Style regular = doc.addStyle( "regular", defaultStyle);
-		StyleConstants.setFontFamily( regular, "SansSerif");
+		StyleConstants.setFontFamily( regular, "Courier");
 		
 		Style highlighted = doc.addStyle( "highlighted", defaultStyle);
-		StyleConstants.setFontFamily( highlighted, "SansSerif");
+		StyleConstants.setFontFamily( highlighted, "Courier");
 		StyleConstants.setForeground( highlighted, Color.RED);
 		
 		String text = "Bitte treffen Sie eine Auswahl.";
@@ -185,12 +189,10 @@ public class Fenster {
 			doc.insertString( 0, text, doc.getStyle( "regular"));
 		}
 		catch (BadLocationException ex) {
-			// handle exception
+			// TODO handle exception
 		}
 		
 		pane.add( paneScrollPane, BorderLayout.CENTER);
-		
-		testCenterTextPane();
 	}
 	
     ///////////////////////////////////////////////////////////////////////////////////
@@ -217,14 +219,16 @@ public class Fenster {
 	    leftPanel.add( leftText2, leftGridBagC);
 	    leftGridBagC.insets = new Insets( 0,0,0,0);
 	    
-	    String[] monateStrings = { "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September",
-	    						   "Oktober", "November", "Dezember"};
+	    Calendar cal = Calendar.getInstance();
+	    int month = cal.get(Calendar.MONTH);
+	    int year = cal.get(Calendar.YEAR);
+	    
 	    leftComboBoxMonate = new JComboBox<String>( monateStrings);
-	    leftComboBoxMonate.setSelectedIndex(6);
+	    leftComboBoxMonate.setSelectedIndex( month);
 	    leftGridBagC.gridy = 4;
 	    leftGridBagC.gridx = 1;
 	    leftPanel.add( leftComboBoxMonate, leftGridBagC);
-	    
+	    leftComboBoxMonate.addActionListener( aaAuswahlMonat);
 	    
 	    JLabel leftText3 = new JLabel( "Jahr:");
 	    leftGridBagC.gridy = 3;
@@ -238,15 +242,20 @@ public class Fenster {
 	    	jahreList.add( i);
 	    }
 	    leftComboBoxJahre = new JComboBox( jahreList.toArray());
-	    leftComboBoxJahre.setSelectedIndex( 117);
+	    leftComboBoxJahre.setSelectedIndex( year - 1900);
 	    leftGridBagC.gridy = 4;
 	    leftGridBagC.gridx = 2;
 	    leftPanel.add( leftComboBoxJahre, leftGridBagC);
 	    
-	    ImageIcon leftPicture = createImageIcon( "images/Juli.jpg");
+	    leftPictureImages = new ArrayList<ImageIcon>();
+	    for( int i = 0; i < 12; ++i) {
+	    	String fname = "images/" + monateStrings[i] + ".jpg";
+	    	leftPictureImages.add( createImageIcon( fname));
+	    }
+	    
+	    leftPicture = new ImageIcon();
 	    if( leftPicture != null) {
-	    	leftPicture.setImage( leftPicture.getImage().getScaledInstance( 290, 193, Image.SCALE_DEFAULT));
-	    	JLabel leftLabelPicture = new JLabel("", leftPicture, JLabel.CENTER);
+	        leftLabelPicture = new JLabel("", leftPictureImages.get(leftComboBoxMonate.getSelectedIndex()), JLabel.CENTER);
 	    	leftGridBagC.gridy = 5;
 		    leftGridBagC.gridx = 1;
 		    leftGridBagC.gridwidth = 2;
@@ -333,62 +342,328 @@ public class Fenster {
 	    JMenu mnDatei = new JMenu("Datei");
 	    menuBar.add(mnDatei);
 	
-	    JMenuItem mntmNewMenuItem = new JMenuItem("Open");
-	    mnDatei.add(mntmNewMenuItem);
+	    mntmMenuDateiOpen = new JMenuItem("Open");
+	    mntmMenuDateiOpen.addActionListener( aaMenuDatei);
+	    mnDatei.add(mntmMenuDateiOpen);
 	
-	    JMenuItem mntmClose = new JMenuItem("Save");
-	    mnDatei.add(mntmClose);
+	    mntmMenuDateiSave = new JMenuItem("Save");
+	    mntmMenuDateiSave.addActionListener( aaMenuDatei);
+	    mnDatei.add(mntmMenuDateiSave);
 	
-	    JMenuItem mntmOpen = new JMenuItem("Close");
-	    mnDatei.add(mntmOpen);
+	    mntmMenuDateiClose = new JMenuItem("Close");
+	    mntmMenuDateiClose.addActionListener( aaMenuDatei);
+	    mnDatei.add(mntmMenuDateiClose);
 	
 	    JMenu mnKalender = new JMenu("Kalender");
 	    menuBar.add(mnKalender);
 	
-	    JMenuItem mntmFeiertage = new JMenuItem("Feiertage");
+	    mntmFeiertage = new JMenuItem("Feiertage");
+	    mntmFeiertage.addActionListener( aaMenuKalender);
 	    mnKalender.add(mntmFeiertage);
 	
-	    JMenuItem mntmFeiertageOhneSosa = new JMenuItem("Feiertage, ohne So/Sa");
+	    mntmFeiertageOhneSosa = new JMenuItem("Feiertage, ohne So/Sa");
+	    mntmFeiertageOhneSosa.addActionListener( aaMenuKalender);
 	    mnKalender.add(mntmFeiertageOhneSosa);
 	
 	    JMenu mnJahresplaner = new JMenu("Jahresplaner");
 	    menuBar.add(mnJahresplaner);
 	
-	    JMenuItem mntmShow = new JMenuItem("Show");
-	    mnJahresplaner.add(mntmShow);
+	    mntmJahresplanerShow = new JMenuItem("Show");
+	    mntmJahresplanerShow.addActionListener( aaMenuJahresplaner);
+	    mnJahresplaner.add(mntmJahresplanerShow);
 	
-	    JMenuItem mntmSave = new JMenuItem("Save");
-	    mnJahresplaner.add(mntmSave);
+	    mntmJahresplanerSave = new JMenuItem("Save");
+	    mntmJahresplanerSave.addActionListener( aaMenuJahresplaner);
+	    mnJahresplaner.add(mntmJahresplanerSave);
 	
 	    JMenu mnLookFeel = new JMenu("Look & Feel");
 	    menuBar.add(mnLookFeel);
-	
-	    JMenuItem mntmWindows = new JMenuItem("Windows");
+	    
+	    mntmWindows = new JMenuItem("Windows");
+	    mntmWindows.addActionListener( aaLookFeel);
 	    mnLookFeel.add(mntmWindows);
 	
-	    JMenuItem mntmMetal = new JMenuItem("Metal");
+	    mntmMetal = new JMenuItem("Metal");
+	    mntmMetal.addActionListener( aaLookFeel);
 	    mnLookFeel.add(mntmMetal);
 	
-	    JMenuItem mntmMotif = new JMenuItem("Motif");
+	    mntmMotif = new JMenuItem("Motif");
+	    mntmMotif.addActionListener( aaLookFeel);
 	    mnLookFeel.add(mntmMotif);
 	
 	    JMenu mnInfo = new JMenu("Info");
 	    menuBar.add(mnInfo);
 	
 	    JMenuItem mntmAutorin = new JMenuItem("Autorin");
+	    mntmAutorin.addActionListener( aaMenuAutorin);
 	    mnInfo.add(mntmAutorin);
 	
 	    JMenuItem mntmHelp = new JMenuItem("Help");
+	    mntmHelp.addActionListener( aaMenuHilfe);
 	    mnInfo.add(mntmHelp);
     
     }
+    
+    public void showOptionFeiertage( String feiertage) {
+    	JOptionPane.showMessageDialog(frame, feiertage);
+    }
+    
+    public void showOptionPaneMenuAutorin() {
+    	JOptionPane.showMessageDialog(frame, "Kristina Spiegel \nMatrikelnummer: 553423 \nErstelldatum: 14/07/2017 \nVersion: 0.01 (alpha)");
+    }    
 
+    public void showOptionPaneMenuHilfe() {
+    	JOptionPane.showMessageDialog(frame, "Bitte gesunden Menschenverstand benutzen.");
+    }
 
+    public void setLookFeel( int mode) {
+    	
+    	String modestr = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+		if( 1 == mode) {
+			modestr = "javax.swing.plaf.metal.MetalLookAndFeel";
+		}
+		else if( 2 == mode) {
+			modestr = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+		}
+
+    	try {
+    		UIManager.setLookAndFeel( modestr);
+    	}
+    	catch (ClassNotFoundException e) {
+            System.err.println("Couldn't find class for specified look and feel.");
+            System.err.println("Did you include the L&F library in the class path?");
+            System.err.println("Using the default look and feel.");
+        } 
+        catch (UnsupportedLookAndFeelException e) {
+            System.err.println("Can't use the specified look and feel on this platform.");
+            System.err.println("Using the default look and feel.");
+        } 
+        
+        catch (Exception e) {
+            System.err.println("Couldn't get specified look and feel for some reason.");
+            System.err.println("Using the default look and feel.");
+            e.printStackTrace();
+        }
+    	
+    	SwingUtilities.updateComponentTreeUI(frame);
+    	frame.pack();
+	    frame.setVisible(true);
+    }
+    
+    // TODO
+    public int showJahresplanerVon() {
+    	
+    	String ret = (String) JOptionPane.showInputDialog( frame, "'von' Monat auswaehlen: ", "Test",
+    													 JOptionPane.QUESTION_MESSAGE,
+    	                    							 null,
+    	                    							 monateStrings,
+    	                    							"2017");
+
+    	for( int m = 0; m < 12; ++m) {
+    		if( monateStrings[m].equals( ret)) {
+    			return m;
+    		}
+    	}
+    	
+    	assert( false);
+    	return -1;
+    }
+    
+    // TODO
+    public int showJahresplanerBis() {
+    	
+    	String ret = (String) JOptionPane.showInputDialog( frame, "'bis' Monat auswaehlen: ", "Test",
+    													 JOptionPane.QUESTION_MESSAGE,
+    	                    							 null,
+    	                    							 monateStrings,
+    	                    							"2017");
+
+    	for( int m = 0; m < 12; ++m) {
+    		if( monateStrings[m].equals( ret)) {
+    			return m;
+    		}
+    	}
+    	
+    	assert( false);
+    	return -1;
+    }
+    
+    // TODO
+    public void showJahresplaner( String jahresplanerText) {
+    	
+    	JFrame frameJahresplaner = new JFrame("Jahresplaner");
+    	frameJahresplaner.setResizable( false);
+		
+	    Container paneJahresplaner = frameJahresplaner.getContentPane();
+	    if (!( paneJahresplaner.getLayout() instanceof BorderLayout)) {
+	    	System.out.println("Error: frame does not use BorderLayout");
+	    }
+
+	    JTextPane jpTextPane = new JTextPane();
+	    jpTextPane.setPreferredSize(new Dimension(3000, 750));
+	    jpTextPane.setMinimumSize(new Dimension(3000, 750));
+		JScrollPane jppaneScrollPane = new JScrollPane( jpTextPane);
+		jppaneScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		jppaneScrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		jppaneScrollPane.setPreferredSize(new Dimension(1400, 750));
+		jppaneScrollPane.setMinimumSize(new Dimension(1400, 750));
+    	
+		jpdoc = jpTextPane.getStyledDocument();
+		
+		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
+		
+		Style jpregular = jpdoc.addStyle( "regular", defaultStyle);
+		StyleConstants.setFontFamily( jpregular, "Courier");
+		
+		try {
+			jpdoc.insertString( 0, jahresplanerText, jpdoc.getStyle( "regular"));
+		}
+		catch (BadLocationException ex) {
+			
+			// handle exception
+		}
+		
+		paneJahresplaner.add( jppaneScrollPane, BorderLayout.CENTER);
+		
+	    //Display the window.
+		frameJahresplaner.pack();
+		frameJahresplaner.setVisible(true);
+    }
+    
+    // TODO
+    public void saveJahresplaner() {
+    	
+    	assert( jpdoc != null);
+    	
+    	JFileChooser fileChooser = new JFileChooser();
+    	if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+    		
+    		File file = fileChooser.getSelectedFile();
+    		String filename = file.getAbsolutePath();
+    	   
+    		RTFEditorKit kit = new RTFEditorKit( );
+    	            
+    		if(!filename.endsWith(".rtf")){
+	            filename += ".rtf";
+	        }
+	        
+	        BufferedOutputStream out = null;
+	        try {
+	            out = new BufferedOutputStream(new FileOutputStream(filename));
+	                
+	            // Stream schreiben
+	            try {
+	                kit.write(out, jpdoc, 0, jpdoc.getLength());
+	            }
+	            catch (BadLocationException e) {
+	                e.printStackTrace();
+	            }
+
+	        } 
+	        catch (IOException e) {
+	            System.err.println( "Konnte Datei nicht erstellen" );
+	        }
+	        finally{
+	            try {                  
+	                out.close(); // Stream schließen
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+    	}
+    }
+    
+    // TODO
+    public void openFileCenterPane() {
+    	
+    	assert( jpdoc != null);
+    	
+    	JFileChooser fileChooser = new JFileChooser();
+    	if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+    		File file = fileChooser.getSelectedFile();
+    		String filename = file.getAbsolutePath();
+    		
+    		if( filename.endsWith(".rtf") || filename.endsWith(".txt") || filename.endsWith(".csv") ){
+    			
+    			RTFEditorKit kit = new RTFEditorKit( );
+    			
+    			try {
+    				BufferedInputStream in = new BufferedInputStream(new FileInputStream(filename));
+    				kit.read( in, doc, 0);
+    			}
+    			catch (Exception e) {
+    				System.err.println("Failed to read file.");
+    			}
+    			
+	        }
+    		else {
+    			JOptionPane.showMessageDialog(frame, "Ungueltiges Dateiformat.");
+    		}
+    		
+    	}
+    }
+    
+    // TODO
+    public void saveCenterPane() {
+    	
+    	JFileChooser fileChooser = new JFileChooser();
+    	if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+    		
+    		File file = fileChooser.getSelectedFile();
+    		String filename = file.getAbsolutePath();
+    	   
+    		RTFEditorKit kit = new RTFEditorKit( );
+    	            
+    		if(!filename.endsWith(".rtf")){
+	            filename += ".rtf";
+	        }
+	        
+	        BufferedOutputStream out = null;
+	        try {
+	            out = new BufferedOutputStream(new FileOutputStream(filename));
+	                
+	            // Stream schreiben
+	            try {
+	                kit.write(out, doc, 0, doc.getLength());
+	            }
+	            catch (BadLocationException e) {
+	                e.printStackTrace();
+	            }
+
+	        } 
+	        catch (IOException e) {
+	            System.err.println( "Konnte Datei nicht erstellen" );
+	        }
+	        finally{
+	            try {                  
+	                out.close(); // Stream schließen
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+    	}
+    }
+    
+    // TODO
+    public void setImageMonth() {
+    	System.out.println("Handling");
+    	leftLabelPicture.setIcon( leftPictureImages.get(leftComboBoxMonate.getSelectedIndex()));
+    }
+    
+    // TODO
+    public void terminate() {
+    	
+    	frame.setVisible(false);
+    	frame.dispose();
+    }
+    
     // from https://docs.oracle.com/javase/tutorial/uiswing/components/icon.html
     ImageIcon createImageIcon( String path) {
     	java.net.URL imgURL = getClass().getResource(path);
 		if (imgURL != null) {
-			return new ImageIcon(imgURL);
+			ImageIcon icon = new ImageIcon(imgURL);
+			icon.setImage( icon.getImage().getScaledInstance( 290, 193, Image.SCALE_DEFAULT));
+			return icon;
 		} else {
 			System.err.println("Couldn't find file: " + path);
 			return null;

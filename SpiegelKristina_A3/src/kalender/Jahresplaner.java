@@ -12,7 +12,7 @@ public class Jahresplaner {
     private int tag = 1;
     private final int columnWidth = 40; //Konstante fuer eine Spaltenbreite einer Zeile des Jahresplaners
     
-    boolean mitFeiertagen = true;
+    public boolean mitFeiertagen = true;
     
     Kalender kalender;
     

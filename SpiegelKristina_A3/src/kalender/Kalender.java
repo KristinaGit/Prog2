@@ -53,6 +53,24 @@ public class Kalender implements IKalender {
 	 private int calFormatSelection = 0; 
 	 
 	 
+	 // TODO
+	 public HashMap<Integer, Event> getHolidaysForCurrentYear() {
+		 return holidaysforcurrent;
+	 }
+	 
+	 // TODO
+	 public int getWochentagNeujahr( int year) {
+		 int tagesnummer = calFuncs.tagesnummer( 1, 1, year);
+		 int weekday = calFuncs.wochentag_im_jahr( year, tagesnummer);  
+		 return weekday;
+	 }
+	 
+	 // TODO
+	 public Event getFeiertagTagesnummer( int tn) {
+		return holidaysforcurrent.get(tn);
+	 }
+	 
+	 
 	 /*
 	  * public boolean getFormatSelection(){
 	  * --------------------------------------

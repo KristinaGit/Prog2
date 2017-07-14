@@ -4,6 +4,7 @@ import gui.Fenster;
 import kalender.Kalender;
 
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class ActionAdapterRBJahreskalender implements ActionListener {
 	
@@ -22,15 +23,18 @@ public class ActionAdapterRBJahreskalender implements ActionListener {
 		int year = 1900 + fenster.leftComboBoxJahre.getSelectedIndex();
 		kalender.generateHolidaysForCurrentYear( year );
 		
-		StringBuffer wholeyear = new StringBuffer();
+		fenster.setCenterTextPaneFormatted( "", false, false);
+		
 		for( int monat = 1; monat <= 12; monat++ ){
 			
 			String headlineFormat = kalender.getKopfzeileMonatsblatt( year, monat);
-			wholeyear.append( headlineFormat);
-			String monthStr = kalender.getMonatsblatt( year, monat);
-			wholeyear.append(monthStr);
+			fenster.setCenterTextPaneFormatted( headlineFormat, false, true);
 			
-			fenster.setCenterTextPane(wholeyear.toString());
+			ArrayList<Kalender.StreamTokenH> monatsBlatt = kalender.getMonatsblattWithFormatting( year, monat);
+			
+			for( int i = 0; i < monatsBlatt.size(); ++i) {
+				fenster.setCenterTextPaneFormatted( monatsBlatt.get(i).token, monatsBlatt.get(i).highlight, true);
+			}
 			
 		}
 	

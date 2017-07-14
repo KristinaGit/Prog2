@@ -1,12 +1,11 @@
 package controller;
 
 import java.awt.event.*;
-import java.util.Observable;
 
 import gui.Fenster;
 import kalender.Kalender;
 
-public class ActionAdapterRBMonatsblatt extends Observable implements ActionListener  {
+public class ActionAdapterRBMonatsblatt implements ActionListener  {
 
 	Fenster fenster;
 	Kalender kalender;
@@ -29,10 +28,7 @@ public class ActionAdapterRBMonatsblatt extends Observable implements ActionList
 		String monthStr = kalender.getMonatsblatt( year, month);
 		output.append(monthStr);
 		
-		fenster.setCenterTextPaneFormatted( output.toString(), true, false);
-		
-		setChanged();
-		notifyObservers();
+		fenster.setCenterTextPaneFormatted( output.toString(), false, false);
 	}
 	
 }

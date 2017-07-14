@@ -7,6 +7,7 @@ import kalender.Kalender;
 
 public class ActionAdapterKalenderjahr implements ActionListener{
 	
+	// TODO remove member and constructor
 	Fenster fenster = null;
 	Kalender kalender = null;
 	
@@ -27,10 +28,9 @@ public class ActionAdapterKalenderjahr implements ActionListener{
 			wholeyear.append( headlineFormat);
 			String monthStr = kalender.getMonatsblatt( year, monat);
 			wholeyear.append(monthStr);
-			
-			fenster.setCenterTextPane(wholeyear.toString());
-		
 		}
+
+		fenster.setCenterTextPaneFormatted( wholeyear.toString(), false, false);
 	
 	}
 }
