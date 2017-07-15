@@ -8,6 +8,10 @@ import kalender.Kalender;
 
 public class ActionAdapterMenuJahresplaner implements ActionListener  {
 	
+	
+	/**
+	 * Eventhandling der Jahresplaner-Option im Menu. Inklusive Speicher-Option.
+	 */
 	public void actionPerformed( ActionEvent event) {
 		
 		System.out.println("Out");
@@ -16,8 +20,7 @@ public class ActionAdapterMenuJahresplaner implements ActionListener  {
 		Kalender cal = Kalender.getInstance();
 		
 		if( event.getSource() == (Object) f.mntmJahresplanerShow) {
-			
-			// TODO: Error handling when return values are not in valid range (e.g. user pressed cancel)
+
 			int monatVon = f.showJahresplanerVon();
 			if( monatVon < 0) {
 				System.err.println("ActionAdapterMenuJahresplaner : monatVon has invalid value. Probably user pressed cancel");
@@ -45,7 +48,6 @@ public class ActionAdapterMenuJahresplaner implements ActionListener  {
 		else if( event.getSource() == (Object) f.mntmJahresplanerSave) {
 		
 			if( f.jpdoc != null) {
-				// TODO
 				f.saveJahresplaner();
 			}
 		}

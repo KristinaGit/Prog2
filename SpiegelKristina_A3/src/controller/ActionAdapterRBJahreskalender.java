@@ -11,11 +11,15 @@ public class ActionAdapterRBJahreskalender implements ActionListener {
 	Fenster fenster = null;
 	Kalender kalender = null;
 	
+	
 	public ActionAdapterRBJahreskalender( Fenster f) {
 		fenster = f;
 		kalender = Kalender.getInstance();
 	}
 	
+	/**
+	 * Formatierte Ausgabe des Jahreskalenders mit Feiertagen.
+	 */
 	public void actionPerformed(ActionEvent event){
 
 		kalender.setModus( 1);

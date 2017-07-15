@@ -6,6 +6,10 @@ import gui.Fenster;
 
 public class ActionAdapterLookFeel implements ActionListener  {
 	
+	
+	/**
+	 * Eventhandling fuer das Look and Feel. Fensterdesign in Windows, Metal oder Motif moeglich.
+	 */
 	public void actionPerformed( ActionEvent event) {
 		
 		Fenster f = Fenster.getInstance();

@@ -7,7 +7,7 @@ import kalender.Kalender;
 
 public class ActionAdapterKalenderjahr implements ActionListener{
 	
-	// TODO remove member and constructor
+	//TODO Fenster und Konstruktor koennen noch entfernt werden hier
 	Fenster fenster = null;
 	Kalender kalender = null;
 	
@@ -16,6 +16,9 @@ public class ActionAdapterKalenderjahr implements ActionListener{
 		kalender = Kalender.getInstance();
 	}
 	
+	/**
+	 * Gibt das gesamte Kalenderjahr ohne Feiertage aus
+	 */
 	public void actionPerformed(ActionEvent event){
 		
 		kalender.setModus( -1);

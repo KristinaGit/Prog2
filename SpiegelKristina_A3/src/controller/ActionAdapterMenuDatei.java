@@ -6,6 +6,10 @@ import gui.Fenster;
 
 public class ActionAdapterMenuDatei implements ActionListener  {
 	
+	
+	/**
+	 * Eventhandling fuer die Menu-Punkte Open/Save/Close.
+	 */
 	public void actionPerformed( ActionEvent event) {
 		
 		Fenster f = Fenster.getInstance();

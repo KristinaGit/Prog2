@@ -8,6 +8,10 @@ import kalender.Kalender;
 
 public class ActionAdapterMenuKalender implements ActionListener  {
 	
+	
+	/**
+	 * Eventandling der Menu-Option Kalender. Anzeige der Feiertage im Jahr sortiert mit Datum und Anzeige der Feiertage ohne Sa / So.
+	 */
 	public void actionPerformed( ActionEvent event) {
 		
 		Fenster f = Fenster.getInstance();

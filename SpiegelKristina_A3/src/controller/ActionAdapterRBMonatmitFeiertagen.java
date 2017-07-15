@@ -19,6 +19,9 @@ public class ActionAdapterRBMonatmitFeiertagen implements ActionListener {
 		kalender = Kalender.getInstance();
 	}
 	
+	/**
+	 * Eventhandling fuer die Ausgabe von Monatsblatt mit Feiertagen auf der TextPane.
+	 */
 	public void actionPerformed(ActionEvent event) {
 
 		kalender.setModus(1);

@@ -6,6 +6,10 @@ import gui.Fenster;
 
 public class ActionAdapterAuswahlMonat implements ActionListener{
 	
+	
+	/**
+	 * setzt das Bild zum jeweiligen Monat
+	 */
 	public void actionPerformed(ActionEvent event){
 		
 		Fenster f = Fenster.getInstance();
